@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#f0f2f5">
+    <meta name="theme-color" content="#FFF0F5">
     <title>菱菱和小珂的秘密基地</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #FFF0F5;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -54,12 +54,14 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .card {
             background-color: white; border-radius: 25px; padding: 20px; margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06); display: flex; flex-direction: column;
+            box-shadow: 0 8px 20px rgba(255,182,193,0.2);
+            display: flex; flex-direction: column;
             align-items: center; width: 90%; max-width: 340px; box-sizing: border-box;
         }
         .card h2 { margin: 0 0 15px 0; color: #2c3e50; font-size: 20px; }
         .count-display {
-            display: flex; gap: 15px; background-color: #f1f2f6; padding: 8px 15px;
+            display: flex; gap: 15px; background-color: #FFF9FA;
+            padding: 8px 15px;
             border-radius: 15px; font-size: 13px; color: #576574; font-weight: bold;
             width: 100%; justify-content: center; box-sizing: border-box; margin-bottom: 15px;
         }
@@ -96,11 +98,11 @@
         .h-result { font-weight: bold; color: #2c3e50; }
         .empty-history { text-align: center; color: #999; font-size: 14px; padding: 20px 0; width: 100%; }
         .mood-container { width: 100%; display: flex; flex-direction: column; gap: 10px; }
-        .mood-box { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 12px 15px; border-radius: 15px; }
+        .mood-box { display: flex; justify-content: space-between; align-items: center; background: #FFF9FA; padding: 12px 15px; border-radius: 15px; }
         .mood-name { font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 5px; }
         .mood-name.xiaoke { color: #3498db; }
         .mood-name.lingling { color: #e91e63; }
-        .mood-select { border: 1px solid #ddd; background: white; padding: 5px 10px; border-radius: 10px; font-size: 14px; outline: none; }
+        .mood-select { border: 1px solid #FFB6C1; background: white; padding: 5px 10px; border-radius: 10px; font-size: 14px; outline: none; }
         .mood-text { font-size: 15px; font-weight: bold; color: #2c3e50;}
         .msg-board { width: 100%; background: #fff9c4; border-radius: 15px; padding: 15px; box-sizing: border-box; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); position: relative; }
         .msg-board::before { content: "📌"; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); font-size: 24px; }
@@ -117,11 +119,11 @@
         .coupon-btn:active { transform: scale(0.95); }
         .coupon-btn:disabled { background: rgba(255,255,255,0.5); color: #fff; cursor: not-allowed; transform: none; }
         .restock-box {
-            width: 100%; background: #f1f2f6; border-radius: 15px; padding: 15px; margin-top: 15px;
+            width: 100%; background: #FFF9FA; border-radius: 15px; padding: 15px; margin-top: 15px;
             display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; 
         }
         .restock-controls { display: flex; gap: 10px; width: 100%; align-items: center; }
-        .restock-select { flex: 1; border: 1px solid #ddd; background: white; padding: 8px; border-radius: 10px; font-size: 14px; outline: none; }
+        .restock-select { flex: 1; border: 1px solid #FFB6C1; background: white; padding: 8px; border-radius: 10px; font-size: 14px; outline: none; }
         .restock-btn { background: #2ecc71; color: white; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: 0.1s;}
         .restock-btn:active { transform: scale(0.95); }
         .restock-rule { font-size: 11px; color: #7f8c8d; line-height: 1.4; }
@@ -286,7 +288,7 @@
                     </div>
                     <div class="restock-rule">
                         🟢 抱抱/视线/故事：每日2次，冷却4小时<br>
-                        🟡 主人/愿望/大餐/听话：50%失败则送给对方<br>
+                        🟡 主调/愿望/大餐：50%失败倒贴一张绿/黄券<br>
                         🔴 原谅/特权：30%成功，失败随机扣券
                     </div>
                 </div>
@@ -296,6 +298,9 @@
         <div class="tab-section" id="tab-profile">
             <div class="card">
                 <h3>👩 菱菱的面板</h3>
+                <div style="background: #FFF; padding: 8px 15px; border-radius: 12px; width: 100%; box-sizing: border-box; margin-bottom: 10px; cursor: pointer; border: 1px dashed #FFB6C1; text-align: center;" onclick="editBio('lingling')">
+                    <span style="font-size: 13px; color: #e84393; font-weight: bold;" id="lingling-bio">加载中...</span>
+                </div>
                 <p style="font-size: 14px; color: #666;">最后上线：<span id="lingling-last-online" style="color:#3498db; font-weight:bold;">未知</span></p>
                 <p style="font-size: 14px; color: #666;">当前称号：<span id="lingling-title" style="color: #e67e22; font-weight: bold;">平平无奇</span></p>
                 <p style="font-size: 14px; color: #666;">进货胜率：<span id="lingling-win-rate" style="font-weight:bold;">0%</span> (赢 <span id="lingling-wins">0</span> / 总 <span id="lingling-total">0</span>)</p>
@@ -304,6 +309,9 @@
             </div>
             <div class="card">
                 <h3>👦 小珂的面板</h3>
+                <div style="background: #FFF; padding: 8px 15px; border-radius: 12px; width: 100%; box-sizing: border-box; margin-bottom: 10px; cursor: pointer; border: 1px dashed #FFB6C1; text-align: center;" onclick="editBio('xiaoke')">
+                    <span style="font-size: 13px; color: #e84393; font-weight: bold;" id="xiaoke-bio">加载中...</span>
+                </div>
                 <p style="font-size: 14px; color: #666;">最后上线：<span id="xiaoke-last-online" style="color:#3498db; font-weight:bold;">未知</span></p>
                 <p style="font-size: 14px; color: #666;">当前称号：<span id="xiaoke-title" style="color: #e67e22; font-weight: bold;">平平无奇</span></p>
                 <p style="font-size: 14px; color: #666;">进货胜率：<span id="xiaoke-win-rate" style="font-weight:bold;">0%</span> (赢 <span id="xiaoke-wins">0</span> / 总 <span id="xiaoke-total">0</span>)</p>
@@ -350,19 +358,19 @@
             '原谅一次券': { desc: '做错小事免除一次生气TvT', count: 4 },
             '视线共享券': { desc: '拍一张你眼前的画面发给我', count: 5 },
             '见面特权券': { desc: '留到下次见面时使用！无条件陪我做一件我想做的事', count: 3 },
-            '无条件听话券': { desc: '接下来的三小时内对方需要无条件听从你的命令', count: 0 },
             '豪华大餐券': { desc: '带我去吃一顿好吃的！', count: 2 },
             '叫主人券': { desc: '对方三小时内需要无条件叫自己主人', count: 5 },
             '贴贴抱抱券': { desc: '需要一个长达三分钟的拥抱OvO', count: 10 }
         };
 
         const tier1 = ['贴贴抱抱券', '视线共享券', '睡前故事券'];
-        const tier2 = ['叫主人券', '满足愿望券', '豪华大餐券', '无条件听话券'];
+        const tier2 = ['叫主人券', '满足愿望券', '豪华大餐券'];
         const tier3 = ['原谅一次券', '见面特权券'];
 
         let currentUser = ''; 
         let dbUrl = ''; 
         let masterKey = '';
+        let dataCache = null;
 
         const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
         function jbHeaders(extra) {
@@ -433,8 +441,8 @@
                 messageBoard: { text: "欢迎来到我们的秘密基地！", updateBy: "系统", time: getTimeString() },
                 messageBoard2: { text: "这里也可以写贴贴话哦！", updateBy: "系统", time: getTimeString() },
                 stats: {
-                    xiaoke: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0 },
-                    lingling: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0 }
+                    xiaoke: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0, bio: "这家伙很懒，还没写签名~" },
+                    lingling: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0, bio: "这家伙很懒，还没写签名~" }
                 }
             };
 
@@ -493,12 +501,12 @@
             }
             if (!data.stats) {
                 data.stats = {
-                    xiaoke: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0 },
-                    lingling: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0 }
+                    xiaoke: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0, bio: "这家伙很懒，还没写签名~" },
+                    lingling: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0, bio: "这家伙很懒，还没写签名~" }
                 };
             } else {
                 ['xiaoke', 'lingling'].forEach(user => {
-                    const defaults = { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0 };
+                    const defaults = { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0, bio: "这家伙很懒，还没写签名~" };
                     data.stats[user] = Object.assign({}, defaults, data.stats[user] || {});
                 });
             }
@@ -584,6 +592,23 @@
             }).then(() => alert("戳中啦！"));
         }
 
+        function editBio(user) {
+            if (currentUser !== user) {
+                alert("只能修改自己的签名哦！");
+                return;
+            }
+            let bioEl = document.getElementById(user + '-bio');
+            let currentBio = bioEl ? bioEl.innerText.replace(' ✎', '') : "";
+            let newBio = prompt("请输入你的今日状态/个性签名：", currentBio === "这家伙很懒，还没写签名~" ? "" : currentBio);
+            if (newBio !== null) {
+                let finalBio = newBio.trim() === "" ? "这家伙很懒，还没写签名~" : newBio.trim();
+                fetchAndUpdate(data => {
+                    data.stats[user].bio = finalBio;
+                    return data;
+                });
+            }
+        }
+
         function innerGachaCalc(data, isWin) {
             if(!data.stats) return;
             data.stats[currentUser].total += 1;
@@ -600,18 +625,26 @@
         }
 
         function updateProfileUI(data) {
+            dataCache = data; 
             if(!data.stats) return; 
+
+            document.getElementById('lingling-bio').innerText = data.stats.lingling.bio + (currentUser === 'lingling' ? " ✎" : "");
+            document.getElementById('xiaoke-bio').innerText = data.stats.xiaoke.bio + (currentUser === 'xiaoke' ? " ✎" : "");
+
             document.getElementById('lingling-last-online').innerText = data.stats.lingling.lastOnline;
             document.getElementById('xiaoke-last-online').innerText = data.stats.xiaoke.lastOnline;
             document.getElementById('lingling-pokes').innerText = data.stats.lingling.pokes;
             document.getElementById('xiaoke-pokes').innerText = data.stats.xiaoke.pokes;
             document.getElementById('lingling-wins').innerText = data.stats.lingling.wins;
             document.getElementById('lingling-total').innerText = data.stats.lingling.total;
-            document.getElementById('lingling-win-rate').innerText = data.stats.lingling.total > 0 ? Math.round((data.stats.lingling.wins / data.stats.lingling.total) * 100) + "%" : "0%";
+            
+            let lRate = data.stats.lingling.total > 0 ? (data.stats.lingling.wins / data.stats.lingling.total) : 0;
+            document.getElementById('lingling-win-rate').innerText = Math.round(lRate * 100) + "%";
+            
+            let xRate = data.stats.xiaoke.total > 0 ? (data.stats.xiaoke.wins / data.stats.xiaoke.total) : 0;
+            document.getElementById('xiaoke-win-rate').innerText = Math.round(xRate * 100) + "%";
+
             document.getElementById('lingling-title').innerText = data.stats.lingling.title;
-            document.getElementById('xiaoke-wins').innerText = data.stats.xiaoke.wins;
-            document.getElementById('xiaoke-total').innerText = data.stats.xiaoke.total;
-            document.getElementById('xiaoke-win-rate').innerText = data.stats.xiaoke.total > 0 ? Math.round((data.stats.xiaoke.wins / data.stats.xiaoke.total) * 100) + "%" : "0%";
             document.getElementById('xiaoke-title').innerText = data.stats.xiaoke.title;
             
             if (data.stats.xiaoke.title === "🎰 天选之子" || data.stats.lingling.title === "🎰 天选之子") {
@@ -825,9 +858,19 @@
                         resultText = `🎰 轮盘赌赢了！获得了 ${cName}`;
                         innerGachaCalc(data, true);
                     } else {
-                        data[oppUser].coupons[cName].count += 1;
-                        msg = "😭 赌博失败！券直接送给对方了！对方+1！";
-                        resultText = `💥 轮盘赌输了！反送对方一张 ${cName}`;
+                        let avail = Object.keys(data[currentUser].coupons).filter(k => 
+                            (tier1.includes(k) || tier2.includes(k)) && data[currentUser].coupons[k].count > 0
+                        );
+                        if(avail.length > 0) {
+                            let lossCard = avail[Math.floor(Math.random() * avail.length)];
+                            data[currentUser].coupons[lossCard].count -= 1;
+                            data[oppUser].coupons[lossCard].count += 1;
+                            msg = `😭 赌博失败！随机扣除了你的一张【${lossCard}】送给了对方！`;
+                            resultText = `💥 轮盘赌输了！倒贴对方一张 ${lossCard}`;
+                        } else {
+                            msg = "😭 赌博失败！原本要扣一张绿/黄券送对方，但你已经穷得没券可扣了！";
+                            resultText = `💥 进货失败，穷得连倒贴的券都没了`;
+                        }
                         innerGachaCalc(data, false);
                     }
                 } 
