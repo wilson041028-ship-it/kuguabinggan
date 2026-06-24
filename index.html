@@ -10,30 +10,77 @@
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 20px 0 100px 0; margin: 0; user-select: none; -webkit-user-select: none; min-height: 100vh; box-sizing: border-box; }
-        input, textarea, select, option { user-select: auto !important; -webkit-user-select: auto !important; }
-        #setup-screen, #main-app { display: none; flex-direction: column; align-items: center; width: 100%; }
-        .global-header { width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; }
-        .top-bar { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; margin-bottom: 5px; }
-        .app-title { color: #333; margin: 0; font-size: 22px; font-weight: bold; letter-spacing: 1px; text-align: center; }
-        .refresh-btn { background-color: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 15px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.1s; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0 100px 0; 
+            margin: 0;
+            user-select: none; 
+            -webkit-user-select: none;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        input, textarea, select, option {
+            user-select: auto !important;
+            -webkit-user-select: auto !important;
+        }
+        #setup-screen, #main-app {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        .global-header {
+            width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 15px;
+        }
+        .top-bar {
+            display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; margin-bottom: 5px;
+        }
+        .app-title {
+            color: #333; margin: 0; font-size: 22px; font-weight: bold; letter-spacing: 1px; text-align: center;
+        }
+        .refresh-btn {
+            background-color: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 15px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.1s;
+        }
         .refresh-btn:active { transform: scale(0.9); }
         .sync-status { font-size: 12px; color: #7f8c8d; height: 16px; margin-top: 5px;}
-        .tab-section { display: none; flex-direction: column; align-items: center; width: 100%; animation: fadeIn 0.3s ease-in-out; }
+        .tab-section {
+            display: none; flex-direction: column; align-items: center; width: 100%; animation: fadeIn 0.3s ease-in-out;
+        }
         .tab-section.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .card { background-color: white; border-radius: 25px; padding: 20px; margin-bottom: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); display: flex; flex-direction: column; align-items: center; width: 90%; max-width: 340px; box-sizing: border-box; }
+        .card {
+            background-color: white; border-radius: 25px; padding: 20px; margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06); display: flex; flex-direction: column;
+            align-items: center; width: 90%; max-width: 340px; box-sizing: border-box;
+        }
         .card h2 { margin: 0 0 15px 0; color: #2c3e50; font-size: 20px; }
-        .count-display { display: flex; gap: 15px; background-color: #f1f2f6; padding: 8px 15px; border-radius: 15px; font-size: 13px; color: #576574; font-weight: bold; width: 100%; justify-content: center; box-sizing: border-box; margin-bottom: 15px; }
+        .count-display {
+            display: flex; gap: 15px; background-color: #f1f2f6; padding: 8px 15px;
+            border-radius: 15px; font-size: 13px; color: #576574; font-weight: bold;
+            width: 100%; justify-content: center; box-sizing: border-box; margin-bottom: 15px;
+        }
         .count-item { display: flex; flex-direction: column; align-items: center; }
         .count-num { font-size: 16px; color: #e74c3c; margin-top: 2px; }
         .count-num.purple { color: #9C27B0; }
         .wheel-container { position: relative; width: 260px; height: 260px; }
-        canvas { width: 100%; height: 100%; border-radius: 50%; background-color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); }
-        .pointer { position: absolute; top: 50%; right: -20px; transform: translateY(-50%); width: 0; height: 0; border-top: 15px solid transparent; border-bottom: 15px solid transparent; z-index: 10; }
+        canvas {
+            width: 100%; height: 100%; border-radius: 50%; background-color: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1); 
+        }
+        .pointer {
+            position: absolute; top: 50%; right: -20px; transform: translateY(-50%);
+            width: 0; height: 0; border-top: 15px solid transparent; border-bottom: 15px solid transparent; z-index: 10;
+        }
         .pointer-food { border-right: 30px solid #e74c3c; }
         .pointer-title { border-right: 30px solid #9C27B0; }
-        button.spin-btn { margin-top: 25px; padding: 12px 0; font-size: 18px; font-weight: bold; color: white; border: none; border-radius: 25px; cursor: pointer; transition: transform 0.1s; width: 80%; }
+        button.spin-btn {
+            margin-top: 25px; padding: 12px 0; font-size: 18px; font-weight: bold;
+            color: white; border: none; border-radius: 25px; cursor: pointer; transition: transform 0.1s; width: 80%;
+        }
         .btn-food { background-color: #e74c3c; box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3); }
         .btn-title { background-color: #9C27B0; box-shadow: 0 4px 10px rgba(156, 39, 176, 0.3); }
         button.spin-btn:active { transform: scale(0.95); }
@@ -69,13 +116,21 @@
         .coupon-btn { background: white; color: #e67e22; border: none; padding: 6px 15px; border-radius: 15px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: 0.1s;}
         .coupon-btn:active { transform: scale(0.95); }
         .coupon-btn:disabled { background: rgba(255,255,255,0.5); color: #fff; cursor: not-allowed; transform: none; }
-        .restock-box { width: 100%; background: #f1f2f6; border-radius: 15px; padding: 15px; margin-top: 15px; display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; }
+        .restock-box {
+            width: 100%; background: #f1f2f6; border-radius: 15px; padding: 15px; margin-top: 15px;
+            display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; 
+        }
         .restock-controls { display: flex; gap: 10px; width: 100%; align-items: center; }
         .restock-select { flex: 1; border: 1px solid #ddd; background: white; padding: 8px; border-radius: 10px; font-size: 14px; outline: none; }
         .restock-btn { background: #2ecc71; color: white; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: 0.1s;}
         .restock-btn:active { transform: scale(0.95); }
         .restock-rule { font-size: 11px; color: #7f8c8d; line-height: 1.4; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 12px 0; padding-bottom: calc(12px + env(safe-area-inset-bottom)); box-shadow: 0 -2px 15px rgba(0,0,0,0.05); z-index: 100; }
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: white;
+            display: flex; justify-content: space-around; padding: 12px 0;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.05); z-index: 100;
+        }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #95a5a6; font-size: 12px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
         .nav-item.active { color: #e74c3c; transform: translateY(-3px); }
         .nav-icon { font-size: 22px; filter: grayscale(100%); transition: all 0.2s; }
@@ -91,12 +146,15 @@
     </style>
 </head>
 <body>
+
     <div id="setup-screen">
         <div class="setup-box">
             <h2>🔗 创建专属互通空间</h2>
-            <p>已精简核心数据结构，完全解决 API 拦截报错问题！纯手动更新，零后台消耗。</p>
+            <p>需要先去 <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> 免费注册一个账号，在 "API Keys" 页面复制你的 <b>X-Master-Key</b>，粘贴到下面（只需做一次，之后生成的两个链接会自动带上这个 key）：</p>
+            <input type="text" id="masterKeyInput" class="link-input" placeholder="粘贴你的 jsonbin.io X-Master-Key" style="margin-bottom: 10px;">
             <button class="setup-btn" id="createDbBtn" onclick="setupDatabase()">点击创建专属空间</button>
             <p id="error-msg" style="color: red; font-size: 12px; display: none; margin-top: 10px;"></p>
+            
             <div class="link-box" id="link-box">
                 <p style="color: #27ae60; font-weight: bold; text-align: center;">✅ 创建成功！</p>
                 <p>请长按复制下方链接发送给菱菱，然后你自己点击你的链接进入：</p>
@@ -108,6 +166,7 @@
             </div>
         </div>
     </div>
+
     <div id="main-app">
         <div class="global-header">
             <div class="top-bar">
@@ -116,6 +175,7 @@
             </div>
             <div class="sync-status" id="sync-status">当前身份: 加载中 | 待同步...</div>
         </div>
+
         <div class="tab-section active" id="tab-wheel">
             <div class="card">
                 <div class="card-header">
@@ -133,6 +193,7 @@
                 <button id="btnFood" class="spin-btn btn-food">开始抽取美食</button>
                 <div id="resultFood" class="result"></div>
             </div>
+
             <div class="card">
                 <div class="card-header">
                     <h2>👑 今天称呼什么？</h2>
@@ -149,6 +210,7 @@
                 <button id="btnTitle" class="spin-btn btn-title">开始抽取称呼</button>
                 <div id="resultTitle" class="result"></div>
             </div>
+
             <div class="card">
                 <h2>📜 近期行动记录</h2>
                 <div class="history-list" id="history-list">
@@ -156,6 +218,7 @@
                 </div>
             </div>
         </div>
+
         <div class="tab-section" id="tab-secret">
             <div class="card">
                 <h2>🔋 今日心情电量</h2>
@@ -184,6 +247,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="card" style="background: transparent; box-shadow: none;">
                 <div class="msg-board">
                     <textarea class="msg-textarea" id="board-text" placeholder="在这里写下你想对Ta说的话吧..."></textarea>
@@ -192,25 +256,28 @@
                 </div>
             </div>
         </div>
+
         <div class="tab-section" id="tab-coupon">
             <div class="card" style="background: transparent; box-shadow: none; padding: 0;">
                 <div style="width: 100%; text-align: center; color: #7f8c8d; font-size: 14px; margin-bottom: 15px;">
                     点击使用或进货后，对方会在记录里看到哦！
                 </div>
                 <div class="coupon-list" id="coupon-list"></div>
+                
                 <div class="restock-box">
                     <div class="restock-controls">
                         <select class="restock-select" id="restock-select"></select>
                         <button class="restock-btn" onclick="restockCoupon()">进货 +1</button>
                     </div>
                     <div class="restock-rule">
-                        🟢 哄睡/视线/连麦：每日2次，冷却4小时<br>
-                        🟡 观影/视频/投喂：50%失败则送给对方<br>
+                        🟢 抱抱/视线/故事：每日2次，冷却4小时<br>
+                        🟡 主人/愿望/大餐：50%失败则送给对方<br>
                         🔴 原谅/特权：30%成功，失败随机扣券
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="bottom-nav">
             <div class="nav-item active" onclick="switchTab('wheel', this)">
                 <span class="nav-icon">🎡</span>
@@ -231,28 +298,34 @@
         const foods = ['牛排', '意面', '板面', '日料', '炒饭', '炒粿条', '泡面', '卤肉饭', '咖喱鸡', '千层面', '汉堡', '炸鸡', '披萨', 'Taco'];
         const titles = ['宝贝', '老公', '哥哥', '宝宝', '小狗', '小珂', '亲爱的', '主人'];
         const colors = ['#FFC107', '#FF9800', '#FF5722', '#F44336', '#E91E63', '#9C27B0', '#3F51B5', '#2196F3', '#4CAF50', '#009688', '#00BCD4', '#673AB7', '#8BC34A', '#03A9F4', '#795548'];
-        
-        const couponMeta = {
-            '空投投喂券': { desc: '给我点个神秘外卖、奶茶或下午茶 🍰', defaultCount: 3 },
-            '马上视频券': { desc: '现在立刻接通视频，让我看看你 📱', defaultCount: 3 },
-            '云端观影券': { desc: '连着麦一起看同一部电影或综艺 🎬', defaultCount: 3 },
-            '连麦入睡券': { desc: '今晚不挂电话，听着彼此声音睡觉 💤', defaultCount: 5 },
-            '专属哄睡券': { desc: '今晚给我讲个故事或者唱歌听 🎤', defaultCount: 3 },
-            '视线共享券': { desc: '立刻拍一张你眼前的画面发我 📸', defaultCount: 5 },
-            '见面特权券': { desc: '下次见面时，满足我的一个愿望 ✨', defaultCount: 1 },
-            '原谅我一次券': { desc: '无条件免除一次生气，不许翻旧账 🛡️', defaultCount: 2 }
-        };
-        
-        const defaultCoupons = {};
-        for(let key in couponMeta) defaultCoupons[key] = couponMeta[key].defaultCount;
 
-        const tier1 = ['连麦入睡券', '视线共享券', '专属哄睡券'];
-        const tier2 = ['空投投喂券', '马上视频券', '云端观影券'];
-        const tier3 = ['原谅我一次券', '见面特权券'];
+        const defaultCoupons = {
+            '睡前故事券': { desc: '给我讲个睡前小故事', count: 3 },
+            '满足愿望券': { desc: '满足一个小愿望', count: 2 },
+            '原谅一次券': { desc: '做错小事免除一次生气TvT', count: 4 },
+            '视线共享券': { desc: '拍一张你眼前的画面发给我', count: 5 },
+            '见面特权券': { desc: '留到下次见面时使用！无条件陪我做一件我想做的事', count: 3 },
+            '豪华大餐券': { desc: '带我去吃一顿好吃的！', count: 2 },
+            '叫主人券': { desc: '对方三小时内需要无条件叫自己主人', count: 5 },
+            '贴贴抱抱券': { desc: '需要一个长达三分钟的拥抱OvO', count: 10 }
+        };
+
+        const tier1 = ['贴贴抱抱券', '视线共享券', '睡前故事券'];
+        const tier2 = ['叫主人券', '满足愿望券', '豪华大餐券'];
+        const tier3 = ['原谅一次券', '见面特权券'];
 
         let currentUser = ''; 
-        let dbId = ''; 
-        const API_BASE = 'https://api.restful-api.dev/objects';
+        let dbUrl = ''; 
+        let masterKey = '';
+
+        // jsonbin.io v3 helpers — every request needs Content-Type + X-Master-Key.
+        // POST creates a bin, GET .../latest reads it, PUT overwrites it.
+        // Response payload from jsonbin is always wrapped as { record: {...}, metadata: {...} },
+        // so we always read/write through `record`.
+        const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
+        function jbHeaders(extra) {
+            return Object.assign({ 'Content-Type': 'application/json', 'X-Master-Key': masterKey }, extra || {});
+        }
 
         function getTodayString() {
             const now = new Date(); return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
@@ -273,18 +346,21 @@
             const urlParams = new URLSearchParams(window.location.search);
             const urlUser = urlParams.get('u');
             const urlDb = urlParams.get('db');
+            const urlKey = urlParams.get('key');
 
-            if (urlUser && urlDb) {
+            if (urlUser && urlDb && urlKey) {
                 localStorage.setItem('wheel_user_v9', urlUser); 
                 localStorage.setItem('wheel_db_v9', urlDb);
+                localStorage.setItem('wheel_key_v9', urlKey);
                 window.history.replaceState({}, document.title, window.location.pathname);
-                currentUser = urlUser; dbId = urlDb;
+                currentUser = urlUser; dbUrl = decodeURIComponent(urlDb); masterKey = decodeURIComponent(urlKey);
             } else {
                 currentUser = localStorage.getItem('wheel_user_v9'); 
-                dbId = localStorage.getItem('wheel_db_v9');
+                dbUrl = localStorage.getItem('wheel_db_v9');
+                masterKey = localStorage.getItem('wheel_key_v9');
             }
 
-            if (!currentUser || !dbId) {
+            if (!currentUser || !dbUrl || !masterKey) {
                 document.getElementById('setup-screen').style.display = 'flex';
             } else {
                 document.getElementById('main-app').style.display = 'flex';
@@ -295,41 +371,53 @@
         async function setupDatabase() {
             const btn = document.getElementById('createDbBtn');
             const errorMsg = document.getElementById('error-msg');
-            btn.innerText = "正在云端创建..."; btn.disabled = true;
+            const keyInput = document.getElementById('masterKeyInput');
+            const key = keyInput.value.trim();
+
+            if (!key) {
+                errorMsg.innerText = "请先粘贴你的 jsonbin.io X-Master-Key！";
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            btn.innerText = "正在创建..."; btn.disabled = true;
+            errorMsg.style.display = 'none';
 
             const initialPayload = {
-                name: "wheel_data",
-                data: {
-                    date: getTodayString(),
-                    xiaoke: { food: 0, title: 0, mood: '开心 100% 💖', coupons: JSON.parse(JSON.stringify(defaultCoupons)), restockLimits: {} },
-                    lingling: { food: 0, title: 0, mood: '开心 100% 💖', coupons: JSON.parse(JSON.stringify(defaultCoupons)), restockLimits: {} },
-                    history: [],
-                    messageBoard: { text: "欢迎来到我们的秘密基地！", updateBy: "系统", time: getTimeString() }
-                }
+                date: getTodayString(),
+                xiaoke: { food: 0, title: 0, mood: '开心 100% 💖', coupons: JSON.parse(JSON.stringify(defaultCoupons)), restockLimits: {} },
+                lingling: { food: 0, title: 0, mood: '开心 100% 💖', coupons: JSON.parse(JSON.stringify(defaultCoupons)), restockLimits: {} },
+                history: [],
+                messageBoard: { text: "欢迎来到我们的秘密基地！", updateBy: "系统", time: getTimeString() }
             };
 
             try {
-                const response = await fetch(API_BASE, {
+                const r = await fetch(JSONBIN_BASE, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: jbHeaders({ 'X-Master-Key': key, 'X-Bin-Name': 'lingling_xiaoke_base' }),
                     body: JSON.stringify(initialPayload)
                 });
-                
-                if (!response.ok) throw new Error("网络节点响应异常");
 
-                const resData = await response.json();
-                const newDbId = resData.id; 
-                
+                if (!r.ok) {
+                    // Surface the *real* reason instead of swallowing it.
+                    const errBody = await r.text();
+                    console.error('jsonbin create failed:', r.status, errBody);
+                    throw new Error(`HTTP ${r.status}: ${errBody}`);
+                }
+
+                const d = await r.json();
+                const binId = d.metadata.id;
+
                 const baseUrl = window.location.origin + window.location.pathname;
-                document.getElementById('link-lingling').value = `${baseUrl}?u=lingling&db=${newDbId}`;
-                document.getElementById('link-xiaoke').value = `${baseUrl}?u=xiaoke&db=${newDbId}`;
-                
+                const keyEnc = encodeURIComponent(key);
+                document.getElementById('link-lingling').value = `${baseUrl}?u=lingling&db=${encodeURIComponent(binId)}&key=${keyEnc}`;
+                document.getElementById('link-xiaoke').value = `${baseUrl}?u=xiaoke&db=${encodeURIComponent(binId)}&key=${keyEnc}`;
                 document.getElementById('link-box').style.display = 'block';
                 btn.style.display = 'none';
-                errorMsg.style.display = 'none';
-
-            } catch (error) {
-                errorMsg.innerText = "创建失败：" + error.message; 
+                keyInput.style.display = 'none';
+            } catch (e) {
+                console.error(e);
+                errorMsg.innerText = "创建失败：" + e.message + "（打开浏览器开发者工具的 Console 可以看到完整错误，常见原因是 Key 复制错了，或免费额度用完了）";
                 errorMsg.style.display = 'block';
                 btn.innerText = "重试创建"; btn.disabled = false;
             }
@@ -337,7 +425,7 @@
 
         function setupMainApp() {
             const roleName = currentUser === 'lingling' ? '👩 菱菱' : '👦 小珂';
-            document.getElementById('sync-status').innerText = `当前身份: ${roleName} | 等待手动刷新`;
+            document.getElementById('sync-status').innerText = `当前身份: ${roleName} | 待手动刷新`;
 
             if (currentUser === 'lingling') {
                 document.getElementById('lingling-mood-display').style.display = 'none';
@@ -358,7 +446,7 @@
                 if(!data[user].restockLimits) data[user].restockLimits = {};
                 for(let key in defaultCoupons) {
                     if(data[user].coupons[key] === undefined) {
-                        data[user].coupons[key] = defaultCoupons[key];
+                        data[user].coupons[key] = JSON.parse(JSON.stringify(defaultCoupons[key]));
                     }
                 }
             });
@@ -367,14 +455,23 @@
 
         async function syncDataFromServer(isSilent = false) {
             const statusDiv = document.getElementById('sync-status');
-            if(!isSilent) statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | 🔄 正在获取对方数据...`;
+            if(!isSilent) statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | 🔄 正在获取数据...`;
             
             try {
-                const response = await fetch(`${API_BASE}/${dbId}`, { cache: 'no-store' });
-                const resJson = await response.json();
-                let data = resJson.data;
+                const response = await fetch(`${JSONBIN_BASE}/${dbUrl}/latest`, {
+                    headers: jbHeaders(),
+                    cache: 'no-store'
+                });
 
-                if (!data || !data.xiaoke) throw new Error("数据格式异常");
+                if (!response.ok) {
+                    const errBody = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errBody}`);
+                }
+
+                const resJson = await response.json();
+                let data = resJson.record;
+
+                if (!data || !data.xiaoke) throw new Error("返回的数据格式不对");
 
                 if (!data.xiaoke.mood) {
                     data.xiaoke.mood = '开心 100% 💖'; data.lingling.mood = '开心 100% 💖';
@@ -388,21 +485,22 @@
                     data.xiaoke.food = 0; data.xiaoke.title = 0;
                     data.lingling.food = 0; data.lingling.title = 0;
                     
-                    await fetch(`${API_BASE}/${dbId}`, {
+                    await fetch(`${JSONBIN_BASE}/${dbUrl}`, {
                         method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name: "wheel_data", data: data })
+                        headers: jbHeaders(),
+                        body: JSON.stringify(data)
                     });
                 }
 
                 updateUI(data);
                 if(!isSilent) {
-                    statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | ✅ 数据已是最新的`;
+                    statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | ✅ 同步成功`;
                     setTimeout(() => statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | 待手动刷新`, 3000);
                 }
 
             } catch (error) {
-                if(!isSilent) statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | ⚠️ 网络不佳，稍后再试`;
+                console.error('syncDataFromServer failed:', error);
+                if(!isSilent) statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | ⚠️ ${error.message}`;
             }
         }
 
@@ -450,17 +548,16 @@
             restockSelectEl.innerHTML = '';
             
             for (let cName in myCoupons) {
-                let cCount = myCoupons[cName];
-                let disabled = cCount <= 0 ? 'disabled' : '';
-                let btnText = cCount <= 0 ? '已用完' : `使用 (余${cCount})`;
-                let descText = couponMeta[cName] ? couponMeta[cName].desc : '';
+                let cData = myCoupons[cName];
+                let disabled = cData.count <= 0 ? 'disabled' : '';
+                let btnText = cData.count <= 0 ? '已用完' : `使用 (余${cData.count})`;
                 
                 const div = document.createElement('div');
                 div.className = 'coupon-item';
                 div.innerHTML = `
                     <div class="coupon-info">
                         <div class="coupon-name">${cName}</div>
-                        <div class="coupon-desc">${descText}</div>
+                        <div class="coupon-desc">${cData.desc}</div>
                     </div>
                     <div class="coupon-action">
                         <button class="coupon-btn" ${disabled} onclick="useCoupon('${cName}')">${btnText}</button>
@@ -481,21 +578,35 @@
 
         async function fetchAndUpdate(callback) {
             try {
-                const res = await fetch(`${API_BASE}/${dbId}`, { cache: 'no-store' });
+                const res = await fetch(`${JSONBIN_BASE}/${dbUrl}/latest`, {
+                    headers: jbHeaders(),
+                    cache: 'no-store'
+                });
+                if (!res.ok) {
+                    const errBody = await res.text();
+                    throw new Error(`HTTP ${res.status}: ${errBody}`);
+                }
                 const resJson = await res.json();
-                let data = resJson.data;
+                let data = resJson.record;
                 
                 data = mergeCoupons(data);
                 data = callback(data); 
                 if(data === null) return;
                 
-                await fetch(`${API_BASE}/${dbId}`, { 
+                const putRes = await fetch(`${JSONBIN_BASE}/${dbUrl}`, { 
                     method: 'PUT', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ name: "wheel_data", data: data }) 
+                    headers: jbHeaders(), 
+                    body: JSON.stringify(data) 
                 });
+                if (!putRes.ok) {
+                    const errBody = await putRes.text();
+                    throw new Error(`HTTP ${putRes.status}: ${errBody}`);
+                }
                 updateUI(data);
-            } catch(e) {}
+            } catch(e) {
+                console.error('fetchAndUpdate failed:', e);
+                alert('保存失败：' + e.message + '（打开浏览器 Console 看详细错误）');
+            }
         }
 
         function changeMood(newMood) { fetchAndUpdate(data => { data[currentUser].mood = newMood; return data; }); }
@@ -515,10 +626,10 @@
         function useCoupon(couponName) {
             if(confirm(`确定要对Ta使用一张【${couponName}】吗？`)) {
                 fetchAndUpdate(data => {
-                    if (data[currentUser].coupons[couponName] > 0) {
-                        data[currentUser].coupons[couponName] -= 1;
+                    if (data[currentUser].coupons[couponName].count > 0) {
+                        data[currentUser].coupons[couponName].count -= 1;
                         data.history.unshift({ user: currentUser, type: 'coupon', result: `使用了 🎟️ ${couponName}`, time: getTimeString() });
-                        if (data.history.length > 20) data.history.pop();
+                        if (data.history.length > 30) data.history.pop();
                     }
                     return data;
                 });
@@ -557,31 +668,31 @@
                     limits.count += 1;
                     limits.lastTime = now;
                     data[currentUser].restockLimits[cName] = limits;
-                    data[currentUser].coupons[cName] += 1;
+                    data[currentUser].coupons[cName].count += 1;
                     msg = "✅ 成功安全补货1张！";
                     resultText = `📦 安全补货了 ${cName}`;
                 } 
                 else if(tier2.includes(cName)) {
                     if(Math.random() < 0.5) {
-                        data[currentUser].coupons[cName] += 1;
+                        data[currentUser].coupons[cName].count += 1;
                         msg = "🎉 运气爆棚！成功进货1张！";
                         resultText = `🎰 轮盘赌赢了！获得了 ${cName}`;
                     } else {
-                        data[oppUser].coupons[cName] += 1;
+                        data[oppUser].coupons[cName].count += 1;
                         msg = "😭 赌博失败！券直接送给对方了！对方+1！";
                         resultText = `💥 轮盘赌输了！反送对方一张 ${cName}`;
                     }
                 } 
                 else if(tier3.includes(cName)) {
                     if(Math.random() < 0.3) {
-                        data[currentUser].coupons[cName] += 1;
+                        data[currentUser].coupons[cName].count += 1;
                         msg = "🌟 奇迹发生！成功获得稀有特权！";
                         resultText = `👑 绝地求生！成功获取 ${cName}`;
                     } else {
-                        let avail = Object.keys(data[currentUser].coupons).filter(k => data[currentUser].coupons[k] > 0);
+                        let avail = Object.keys(data[currentUser].coupons).filter(k => data[currentUser].coupons[k].count > 0);
                         if(avail.length > 0) {
                             let lossCard = avail[Math.floor(Math.random() * avail.length)];
-                            data[currentUser].coupons[lossCard] -= 1;
+                            data[currentUser].coupons[lossCard].count -= 1;
                             msg = `💀 惨遭反噬！进货失败，并随机丢失了一张【${lossCard}】！`;
                             resultText = `🔥 贪心被反噬！丢失了一张 ${lossCard}`;
                         } else {
@@ -592,7 +703,7 @@
                 }
 
                 data.history.unshift({ user: currentUser, type: 'restock', result: resultText, time: getTimeString() });
-                if (data.history.length > 20) data.history.pop();
+                if (data.history.length > 30) data.history.pop();
                 
                 setTimeout(() => alert(msg), 100);
                 return data;
@@ -631,7 +742,7 @@
                 fetchAndUpdate(data => {
                     data[currentUser][type] += 1;
                     data.history.unshift({ user: currentUser, type: type, result: `抽中了 ${type==='food'?'🍔':'👑'} ${itemsList[wIndex]}`, time: getTimeString() });
-                    if (data.history.length > 20) data.history.pop();
+                    if (data.history.length > 30) data.history.pop();
                     return data;
                 });
                 
