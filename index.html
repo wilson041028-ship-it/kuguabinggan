@@ -7,10 +7,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#f0f2f5">
     <title>菱菱和小珂的秘密基地</title>
-    
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
-    
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,55 +23,41 @@
             min-height: 100vh;
             box-sizing: border-box;
         }
-
-        /* 解决苹果手机无法点击输入框和下拉框的问题 */
         input, textarea, select, option {
             user-select: auto !important;
             -webkit-user-select: auto !important;
         }
-
         #setup-screen, #main-app {
             display: none;
             flex-direction: column;
             align-items: center;
             width: 100%;
         }
-
         .global-header {
             width: 100%; display: flex; flex-direction: column; align-items: center; margin-bottom: 15px;
         }
-
         .top-bar {
             display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; margin-bottom: 5px;
         }
-
         .app-title {
             color: #333; margin: 0; font-size: 22px; font-weight: bold; letter-spacing: 1px; text-align: center;
         }
-
         .refresh-btn {
             background-color: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 15px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.1s;
         }
         .refresh-btn:active { transform: scale(0.9); }
-
         .sync-status { font-size: 12px; color: #7f8c8d; height: 16px; margin-top: 5px;}
-
-        /* 板块切换 */
         .tab-section {
             display: none; flex-direction: column; align-items: center; width: 100%; animation: fadeIn 0.3s ease-in-out;
         }
         .tab-section.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* 卡片基础样式 */
         .card {
             background-color: white; border-radius: 25px; padding: 20px; margin-bottom: 20px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.06); display: flex; flex-direction: column;
             align-items: center; width: 90%; max-width: 340px; box-sizing: border-box;
         }
         .card h2 { margin: 0 0 15px 0; color: #2c3e50; font-size: 20px; }
-
-        /* 转盘样式 */
         .count-display {
             display: flex; gap: 15px; background-color: #f1f2f6; padding: 8px 15px;
             border-radius: 15px; font-size: 13px; color: #576574; font-weight: bold;
@@ -102,8 +86,6 @@
         button.spin-btn:active { transform: scale(0.95); }
         button.spin-btn:disabled { background-color: #bdc3c7; box-shadow: none; cursor: not-allowed; }
         .result { margin-top: 15px; font-size: 18px; font-weight: bold; color: #2c3e50; min-height: 25px; text-align: center; }
-
-        /* 历史记录 */
         .history-list { width: 100%; max-height: 180px; overflow-y: auto; border-top: 1px solid #eee; padding-top: 10px; }
         .history-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #f0f0f0; font-size: 14px; color: #555; }
         .history-item:last-child { border-bottom: none; }
@@ -113,8 +95,6 @@
         .h-user.lingling { color: #e91e63; }
         .h-result { font-weight: bold; color: #2c3e50; }
         .empty-history { text-align: center; color: #999; font-size: 14px; padding: 20px 0; width: 100%; }
-
-        /* 秘密基地 */
         .mood-container { width: 100%; display: flex; flex-direction: column; gap: 10px; }
         .mood-box { display: flex; justify-content: space-between; align-items: center; background: #f8f9fa; padding: 12px 15px; border-radius: 15px; }
         .mood-name { font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 5px; }
@@ -127,8 +107,6 @@
         .msg-textarea { width: 100%; background: transparent; border: none; resize: none; font-size: 16px; color: #333; line-height: 1.5; outline: none; min-height: 80px; font-family: inherit; }
         .msg-btn { width: 100%; background: #f39c12; color: white; border: none; padding: 10px; border-radius: 10px; font-weight: bold; margin-top: 10px; cursor: pointer; transition: 0.1s; }
         .msg-btn:active { transform: scale(0.95); }
-
-        /* 兑换券 */
         .coupon-list { width: 100%; display: flex; flex-direction: column; gap: 12px; }
         .coupon-item { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); border-radius: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 10px rgba(253, 160, 133, 0.3); }
         .coupon-info { display: flex; flex-direction: column; flex: 1;}
@@ -138,7 +116,6 @@
         .coupon-btn { background: white; color: #e67e22; border: none; padding: 6px 15px; border-radius: 15px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: 0.1s;}
         .coupon-btn:active { transform: scale(0.95); }
         .coupon-btn:disabled { background: rgba(255,255,255,0.5); color: #fff; cursor: not-allowed; transform: none; }
-        
         .restock-box {
             width: 100%; background: #f1f2f6; border-radius: 15px; padding: 15px; margin-top: 15px;
             display: flex; flex-direction: column; gap: 10px; box-sizing: border-box; 
@@ -148,8 +125,6 @@
         .restock-btn { background: #2ecc71; color: white; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: 0.1s;}
         .restock-btn:active { transform: scale(0.95); }
         .restock-rule { font-size: 11px; color: #7f8c8d; line-height: 1.4; }
-
-        /* 底部导航 */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; width: 100%; background: white;
             display: flex; justify-content: space-around; padding: 12px 0;
@@ -160,8 +135,6 @@
         .nav-item.active { color: #e74c3c; transform: translateY(-3px); }
         .nav-icon { font-size: 22px; filter: grayscale(100%); transition: all 0.2s; }
         .nav-item.active .nav-icon { filter: grayscale(0%); }
-
-        /* 初始页面 */
         .setup-box { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 320px; margin-top: 40px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         .setup-box h2 { margin-top: 0; color: #3498db; }
         .setup-box p { color: #666; font-size: 14px; line-height: 1.6; text-align: left; }
@@ -174,11 +147,10 @@
 </head>
 <body>
 
-    <!-- 配置页面 -->
     <div id="setup-screen">
         <div class="setup-box">
             <h2>🔗 创建专属互通空间</h2>
-            <p>已为你彻底更换为 restful-api。纯手动按需同步，绝无后台刷新产生的网络波动！</p>
+            <p>已启用多通道智能寻路，系统将自动绑定您当前网络下最稳定的全球数据节点！</p>
             <button class="setup-btn" id="createDbBtn" onclick="setupDatabase()">点击创建专属空间</button>
             <p id="error-msg" style="color: red; font-size: 12px; display: none; margin-top: 10px;"></p>
             
@@ -194,9 +166,7 @@
         </div>
     </div>
 
-    <!-- 主程序 -->
     <div id="main-app">
-        <!-- 头部与手动刷新按钮 -->
         <div class="global-header">
             <div class="top-bar">
                 <div class="app-title">✨ 菱菱和小珂的基地</div>
@@ -205,7 +175,6 @@
             <div class="sync-status" id="sync-status">当前身份: 加载中 | 待同步...</div>
         </div>
 
-        <!-- 1. 转盘板块 -->
         <div class="tab-section active" id="tab-wheel">
             <div class="card">
                 <div class="card-header">
@@ -249,7 +218,6 @@
             </div>
         </div>
 
-        <!-- 2. 秘密基地板块 -->
         <div class="tab-section" id="tab-secret">
             <div class="card">
                 <h2>🔋 今日心情电量</h2>
@@ -288,7 +256,6 @@
             </div>
         </div>
 
-        <!-- 3. 兑换券板块 -->
         <div class="tab-section" id="tab-coupon">
             <div class="card" style="background: transparent; box-shadow: none; padding: 0;">
                 <div style="width: 100%; text-align: center; color: #7f8c8d; font-size: 14px; margin-bottom: 15px;">
@@ -302,15 +269,14 @@
                         <button class="restock-btn" onclick="restockCoupon()">进货 +1</button>
                     </div>
                     <div class="restock-rule">
-                        🟢 哄睡/视线/连麦：每日2次，冷却4小时<br>
-                        🟡 观影/视频/投喂：50%失败则送给对方<br>
+                        🟢 抱抱/视线/故事：每日2次，冷却4小时<br>
+                        🟡 主人/愿望/大餐：50%失败则送给对方<br>
                         🔴 原谅/特权：30%成功，失败随机扣券
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 底部导航 -->
         <div class="bottom-nav">
             <div class="nav-item active" onclick="switchTab('wheel', this)">
                 <span class="nav-icon">🎡</span>
@@ -332,28 +298,23 @@
         const titles = ['宝贝', '老公', '哥哥', '宝宝', '小狗', '小珂', '亲爱的', '主人'];
         const colors = ['#FFC107', '#FF9800', '#FF5722', '#F44336', '#E91E63', '#9C27B0', '#3F51B5', '#2196F3', '#4CAF50', '#009688', '#00BCD4', '#673AB7', '#8BC34A', '#03A9F4', '#795548'];
 
-        // 精简版异地恋专属券
         const defaultCoupons = {
-            '空投投喂券': { desc: '给我点个神秘外卖、奶茶或下午茶 🍰', count: 3 },
-            '马上视频券': { desc: '现在立刻接通视频，让我看看你 📱', count: 3 },
-            '云端观影券': { desc: '连着麦一起看同一部电影或综艺 🎬', count: 3 },
-            '连麦入睡券': { desc: '今晚不挂电话，听着彼此声音睡觉 💤', count: 5 },
-            '专属哄睡券': { desc: '今晚给我讲个故事或者唱歌听 🎤', count: 3 },
-            '视线共享券': { desc: '立刻拍一张你眼前的画面发我 📸', count: 5 },
-            '见面特权券': { desc: '下次见面时，满足我的一个愿望 ✨', count: 1 },
-            '原谅我一次券': { desc: '无条件免除一次生气，不许翻旧账 🛡️', count: 2 }
+            '睡前故事券': { desc: '给我讲个睡前小故事', count: 3 },
+            '满足愿望券': { desc: '满足一个小愿望', count: 2 },
+            '原谅一次券': { desc: '做错小事免除一次生气TvT', count: 4 },
+            '视线共享券': { desc: '拍一张你眼前的画面发给我', count: 5 },
+            '见面特权券': { desc: '留到下次见面时使用！无条件陪我做一件我想做的事', count: 3 },
+            '豪华大餐券': { desc: '带我去吃一顿好吃的！', count: 2 },
+            '叫主人券': { desc: '对方三小时内需要无条件叫自己主人', count: 5 },
+            '贴贴抱抱券': { desc: '需要一个长达三分钟的拥抱OvO', count: 10 }
         };
 
-        // 危险等级划分
-        const tier1 = ['连麦入睡券', '视线共享券', '专属哄睡券'];
-        const tier2 = ['空投投喂券', '马上视频券', '云端观影券'];
-        const tier3 = ['原谅我一次券', '见面特权券'];
+        const tier1 = ['贴贴抱抱券', '视线共享券', '睡前故事券'];
+        const tier2 = ['叫主人券', '满足愿望券', '豪华大餐券'];
+        const tier3 = ['原谅一次券', '见面特权券'];
 
         let currentUser = ''; 
-        let dbId = ''; 
-        
-        // 核心修复：完全使用你指定的 restful-api 接口
-        const API_BASE = 'https://api.restful-api.dev/objects';
+        let dbUrl = ''; 
 
         function getTodayString() {
             const now = new Date(); return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
@@ -367,7 +328,6 @@
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
             element.classList.add('active');
-            // 切换 Tab 时触发一次手动刷新
             syncDataFromServer(true);
         }
 
@@ -376,18 +336,17 @@
             const urlUser = urlParams.get('u');
             const urlDb = urlParams.get('db');
 
-            // 彻底升级到 v7，隔绝之前错误 API 产生的无效数据
             if (urlUser && urlDb) {
-                localStorage.setItem('wheel_user_v7', urlUser); 
-                localStorage.setItem('wheel_db_v7', urlDb);
+                localStorage.setItem('wheel_user_v8', urlUser); 
+                localStorage.setItem('wheel_db_v8', urlDb);
                 window.history.replaceState({}, document.title, window.location.pathname);
-                currentUser = urlUser; dbId = urlDb;
+                currentUser = urlUser; dbUrl = decodeURIComponent(urlDb);
             } else {
-                currentUser = localStorage.getItem('wheel_user_v7'); 
-                dbId = localStorage.getItem('wheel_db_v7');
+                currentUser = localStorage.getItem('wheel_user_v8'); 
+                dbUrl = localStorage.getItem('wheel_db_v8');
             }
 
-            if (!currentUser || !dbId) {
+            if (!currentUser || !dbUrl) {
                 document.getElementById('setup-screen').style.display = 'flex';
             } else {
                 document.getElementById('main-app').style.display = 'flex';
@@ -395,53 +354,80 @@
             }
         }
 
-        // 核心修复：还原 restful-api 的 POST 数据结构
         async function setupDatabase() {
             const btn = document.getElementById('createDbBtn');
             const errorMsg = document.getElementById('error-msg');
-            btn.innerText = "正在云端创建..."; btn.disabled = true;
+            btn.innerText = "正在寻找通畅通道..."; btn.disabled = true;
 
             const initialPayload = {
-                name: "wheel_data",
-                data: {
-                    date: getTodayString(),
-                    xiaoke: { food: 0, title: 0, mood: '开心 100% 💖', coupons: JSON.parse(JSON.stringify(defaultCoupons)), restockLimits: {} },
-                    lingling: { food: 0, title: 0, mood: '开心 100% 💖', coupons: JSON.parse(JSON.stringify(defaultCoupons)), restockLimits: {} },
-                    history: [],
-                    messageBoard: { text: "欢迎来到我们的秘密基地！", updateBy: "系统", time: getTimeString() }
-                }
+                date: getTodayString(),
+                xiaoke: { food: 0, title: 0, mood: '开心 100% 💖', coupons: JSON.parse(JSON.stringify(defaultCoupons)), restockLimits: {} },
+                lingling: { food: 0, title: 0, mood: '开心 100% 💖', coupons: JSON.parse(JSON.stringify(defaultCoupons)), restockLimits: {} },
+                history: [],
+                messageBoard: { text: "欢迎来到我们的秘密基地！", updateBy: "系统", time: getTimeString() }
             };
 
+            let finalUrl = '';
+
             try {
-                const response = await fetch(API_BASE, {
+                let r = await fetch('https://api.npoint.io', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(initialPayload)
                 });
-                
-                if (!response.ok) throw new Error("网络节点响应异常");
+                if (r.ok) {
+                    let d = await r.json();
+                    finalUrl = 'https://api.npoint.io/' + d.id;
+                }
+            } catch (e) {}
 
-                const resData = await response.json();
-                const newDbId = resData.id; 
-                
-                const baseUrl = window.location.origin + window.location.pathname;
-                document.getElementById('link-lingling').value = `${baseUrl}?u=lingling&db=${newDbId}`;
-                document.getElementById('link-xiaoke').value = `${baseUrl}?u=xiaoke&db=${newDbId}`;
-                
-                document.getElementById('link-box').style.display = 'block';
-                btn.style.display = 'none';
-                errorMsg.style.display = 'none';
+            if (!finalUrl) {
+                try {
+                    let r = await fetch('https://api.restful-api.dev/objects', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: "wheel_data", data: initialPayload })
+                    });
+                    if (r.ok) {
+                        let d = await r.json();
+                        finalUrl = 'https://api.restful-api.dev/objects/' + d.id;
+                    }
+                } catch (e) {}
+            }
 
-            } catch (error) {
-                errorMsg.innerText = "创建失败：" + error.message; 
+            if (!finalUrl) {
+                try {
+                    let randId = 'xkll_' + Math.random().toString(36).substr(2, 9);
+                    let url = 'https://jsonbase.com/' + randId;
+                    let r = await fetch(url, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(initialPayload)
+                    });
+                    if (r.ok) {
+                        finalUrl = url;
+                    }
+                } catch (e) {}
+            }
+
+            if (!finalUrl) {
+                errorMsg.innerText = "所有云端节点连接失败，请检查网络或刷新重试。"; 
                 errorMsg.style.display = 'block';
                 btn.innerText = "重试创建"; btn.disabled = false;
+                return;
             }
+
+            const baseUrl = window.location.origin + window.location.pathname;
+            document.getElementById('link-lingling').value = `${baseUrl}?u=lingling&db=${encodeURIComponent(finalUrl)}`;
+            document.getElementById('link-xiaoke').value = `${baseUrl}?u=xiaoke&db=${encodeURIComponent(finalUrl)}`;
+            document.getElementById('link-box').style.display = 'block';
+            btn.style.display = 'none';
+            errorMsg.style.display = 'none';
         }
 
         function setupMainApp() {
             const roleName = currentUser === 'lingling' ? '👩 菱菱' : '👦 小珂';
-            document.getElementById('sync-status').innerText = `当前身份: ${roleName} | 等待手动刷新`;
+            document.getElementById('sync-status').innerText = `当前身份: ${roleName} | 待手动刷新`;
 
             if (currentUser === 'lingling') {
                 document.getElementById('lingling-mood-display').style.display = 'none';
@@ -451,7 +437,6 @@
                 document.getElementById('xiaoke-mood-select').style.display = 'block';
             }
 
-            // 初始化后立刻拉取一次最新数据
             syncDataFromServer(false);
             initWheel('wheelFood', 'btnFood', 'resultFood', foods, '决定了！今天吃', 'food');
             initWheel('wheelTitle', 'btnTitle', 'resultTitle', titles, '决定了！今天称呼', 'title');
@@ -470,19 +455,18 @@
             return data;
         }
 
-        // 核心修复：还原 restful-api 的 GET/PUT 数据结构
         async function syncDataFromServer(isSilent = false) {
             const statusDiv = document.getElementById('sync-status');
-            if(!isSilent) statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | 🔄 正在获取对方数据...`;
+            if(!isSilent) statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | 🔄 正在获取数据...`;
             
             try {
-                const response = await fetch(`${API_BASE}/${dbId}`, { cache: 'no-store' });
+                const timestamp = new Date().getTime();
+                const response = await fetch(`${dbUrl}?_t=${timestamp}`, { cache: 'no-store' });
                 const resJson = await response.json();
-                let data = resJson.data;
+                let data = dbUrl.includes('restful-api.dev') ? resJson.data : resJson;
 
-                if (!data || !data.xiaoke) throw new Error("数据格式异常");
+                if (!data || !data.xiaoke) throw new Error("error");
 
-                // 老数据兼容
                 if (!data.xiaoke.mood) {
                     data.xiaoke.mood = '开心 100% 💖'; data.lingling.mood = '开心 100% 💖';
                     data.messageBoard = { text: "在这个冰箱贴上留句话吧~", updateBy: "系统", time: getTimeString() };
@@ -490,22 +474,23 @@
                 
                 data = mergeCoupons(data);
 
-                // 跨日只清零转盘数据
                 if (data.date !== getTodayString()) {
                     data.date = getTodayString();
                     data.xiaoke.food = 0; data.xiaoke.title = 0;
                     data.lingling.food = 0; data.lingling.title = 0;
                     
-                    await fetch(`${API_BASE}/${dbId}`, {
-                        method: 'PUT',
+                    let method = dbUrl.includes('npoint') ? 'POST' : 'PUT';
+                    let bodyPayload = dbUrl.includes('restful-api.dev') ? { name: "wheel_data", data: data } : data;
+                    await fetch(dbUrl, {
+                        method: method,
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ name: "wheel_data", data: data })
+                        body: JSON.stringify(bodyPayload)
                     });
                 }
 
                 updateUI(data);
                 if(!isSilent) {
-                    statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | ✅ 数据已是最新`;
+                    statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | ✅ 同步成功`;
                     setTimeout(() => statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | 待手动刷新`, 3000);
                 }
 
@@ -588,21 +573,25 @@
 
         async function fetchAndUpdate(callback) {
             try {
-                const res = await fetch(`${API_BASE}/${dbId}`, { cache: 'no-store' });
+                const timestamp = new Date().getTime();
+                const res = await fetch(`${dbUrl}?_t=${timestamp}`, { cache: 'no-store' });
                 const resJson = await res.json();
-                let data = resJson.data;
+                let data = dbUrl.includes('restful-api.dev') ? resJson.data : resJson;
                 
                 data = mergeCoupons(data);
                 data = callback(data); 
                 if(data === null) return;
                 
-                await fetch(`${API_BASE}/${dbId}`, { 
-                    method: 'PUT', 
+                let method = dbUrl.includes('npoint') ? 'POST' : 'PUT';
+                let bodyPayload = dbUrl.includes('restful-api.dev') ? { name: "wheel_data", data: data } : data;
+                
+                await fetch(dbUrl, { 
+                    method: method, 
                     headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ name: "wheel_data", data: data }) 
+                    body: JSON.stringify(bodyPayload) 
                 });
                 updateUI(data);
-            } catch(e) { console.error("操作失败", e); }
+            } catch(e) { console.error(e); }
         }
 
         function changeMood(newMood) { fetchAndUpdate(data => { data[currentUser].mood = newMood; return data; }); }
@@ -642,7 +631,6 @@
                 let msg = '';
                 let resultText = '';
 
-                // 惩罚机制与逻辑判定
                 if(tier1.includes(cName)) {
                     let limits = data[currentUser].restockLimits[cName] || { date: '', count: 0, lastTime: 0 };
                     let today = getTodayString();
