@@ -286,14 +286,14 @@
                     </div>
                     <div class="restock-rule">
                         🟢 抱抱/视线/故事：每日2次，冷却4小时<br>
-                        🟡 主人/愿望/大餐：50%失败则送给对方<br>
+                        🟡 主调/愿望/大餐：50%失败则送给对方<br>
                         🔴 原谅/特权：30%成功，失败随机扣券
                     </div>
                 </div>
             </div>
         </div>
 
-<div class="tab-section" id="tab-profile">
+        <div class="tab-section" id="tab-profile">
             <div class="card">
                 <h3>👩 菱菱的面板</h3>
                 <p style="font-size: 14px; color: #666;">最后上线：<span id="lingling-last-online" style="color:#3498db; font-weight:bold;">未知</span></p>
@@ -332,7 +332,7 @@
                 <span class="nav-icon">🎟️</span>
                 <span>兑换券</span>
             </div>
-	<div class="nav-item" onclick="switchTab('profile', this)">
+            <div class="nav-item" onclick="switchTab('profile', this)">
                 <span class="nav-icon">👑</span>
                 <span>主页</span>
             </div>
@@ -363,10 +363,6 @@
         let dbUrl = ''; 
         let masterKey = '';
 
-        // jsonbin.io v3 helpers — every request needs Content-Type + X-Master-Key.
-        // POST creates a bin, GET .../latest reads it, PUT overwrites it.
-        // Response payload from jsonbin is always wrapped as { record: {...}, metadata: {...} },
-        // so we always read/write through `record`.
         const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
         function jbHeaders(extra) {
             return Object.assign({ 'Content-Type': 'application/json', 'X-Master-Key': masterKey }, extra || {});
@@ -449,7 +445,6 @@
                 });
 
                 if (!r.ok) {
-                    // Surface the *real* reason instead of swallowing it.
                     const errBody = await r.text();
                     console.error('jsonbin create failed:', r.status, errBody);
                     throw new Error(`HTTP ${r.status}: ${errBody}`);
@@ -569,7 +564,7 @@
             }
         }
 
-function updateOnlineTime() {
+        function updateOnlineTime() {
             fetchAndUpdate(function(data) {
                 if(!data.stats) return data; 
                 let now = new Date();
@@ -588,22 +583,19 @@ function updateOnlineTime() {
             }).then(() => alert("戳中啦！"));
         }
 
-        function recordGachaResult(isWin) {
-            fetchAndUpdate(function(data) {
-                if(!data.stats) return data;
-                data.stats[currentUser].total += 1;
-                if (isWin) {
-                    data.stats[currentUser].wins += 1;
-                    data.stats[currentUser].streakWin += 1;
-                    data.stats[currentUser].streakLose = 0;
-                } else {
-                    data.stats[currentUser].streakLose += 1;
-                    data.stats[currentUser].streakWin = 0;
-                }
-                if (data.stats[currentUser].streakWin >= 3) data.stats[currentUser].title = "🎰 天选之子";
-                if (data.stats[currentUser].streakLose >= 3) data.stats[currentUser].title = "🧱 大冤种";
-                return data;
-            });
+        function innerGachaCalc(data, isWin) {
+            if(!data.stats) return;
+            data.stats[currentUser].total += 1;
+            if (isWin) {
+                data.stats[currentUser].wins += 1;
+                data.stats[currentUser].streakWin += 1;
+                data.stats[currentUser].streakLose = 0;
+            } else {
+                data.stats[currentUser].streakLose += 1;
+                data.stats[currentUser].streakWin = 0;
+            }
+            if (data.stats[currentUser].streakWin >= 3) data.stats[currentUser].title = "🎰 天选之子";
+            if (data.stats[currentUser].streakLose >= 3) data.stats[currentUser].title = "🧱 大冤种";
         }
 
         function updateProfileUI(data) {
@@ -633,14 +625,14 @@ function updateOnlineTime() {
 
         function updateUI(data) {
             function getTitle(c) {
-    if(c >= 10) return " 👑[饭桶]";
-    if(c >= 5) return " 🎖️[干饭王]";
-    if(c >= 2) return " 🏅[小吃货]";
-    return "";
-}
+                if(c >= 10) return " 👑[饭桶]";
+                if(c >= 5) return " 🎖️[干饭王]";
+                if(c >= 2) return " 🏅[小吃货]";
+                return "";
+            }
 
-document.getElementById('xiaoke-food-count').innerHTML = data.xiaoke.food + "次<span style='font-size:12px;color:#f39c12'>" + getTitle(data.xiaoke.food) + "</span>";
-document.getElementById('lingling-food-count').innerHTML = data.lingling.food + "次<span style='font-size:12px;color:#f39c12'>" + 	getTitle(data.lingling.food) + "</span>";
+            document.getElementById('xiaoke-food-count').innerHTML = data.xiaoke.food + "次<span style='font-size:12px;color:#f39c12'>" + getTitle(data.xiaoke.food) + "</span>";
+            document.getElementById('lingling-food-count').innerHTML = data.lingling.food + "次<span style='font-size:12px;color:#f39c12'>" + 	getTitle(data.lingling.food) + "</span>";
             document.getElementById('xiaoke-title-count').innerText = `${data.xiaoke.title}次`;
             document.getElementById('lingling-title-count').innerText = `${data.lingling.title}次`;
 
@@ -714,7 +706,7 @@ document.getElementById('lingling-food-count').innerHTML = data.lingling.food + 
             if(prevSelectValue && restockSelectEl.querySelector(`option[value="${prevSelectValue}"]`)) {
                 restockSelectEl.value = prevSelectValue;
             }
-	updateProfileUI(data);
+            updateProfileUI(data);
         }
 
         async function fetchAndUpdate(callback) {
@@ -830,12 +822,12 @@ document.getElementById('lingling-food-count').innerHTML = data.lingling.food + 
                         data[currentUser].coupons[cName].count += 1;
                         msg = "🎉 运气爆棚！成功进货1张！";
                         resultText = `🎰 轮盘赌赢了！获得了 ${cName}`;
-                        recordGachaResult(true);  // 👈 第2处：记录赢了
+                        innerGachaCalc(data, true);
                     } else {
                         data[oppUser].coupons[cName].count += 1;
                         msg = "😭 赌博失败！券直接送给对方了！对方+1！";
                         resultText = `💥 轮盘赌输了！反送对方一张 ${cName}`;
-                        recordGachaResult(false); // 👈 第3处：记录输了
+                        innerGachaCalc(data, false);
                     }
                 } 
                 else if(tier3.includes(cName)) {
@@ -843,7 +835,7 @@ document.getElementById('lingling-food-count').innerHTML = data.lingling.food + 
                         data[currentUser].coupons[cName].count += 1;
                         msg = "🌟 奇迹发生！成功获得稀有特权！";
                         resultText = `👑 绝地求生！成功获取 ${cName}`;
-                        recordGachaResult(true);  // 👈 第2处：记录赢了
+                        innerGachaCalc(data, true);
                     } else {
                         let avail = Object.keys(data[currentUser].coupons).filter(k => data[currentUser].coupons[k].count > 0);
                         if(avail.length > 0) {
@@ -851,12 +843,11 @@ document.getElementById('lingling-food-count').innerHTML = data.lingling.food + 
                             data[currentUser].coupons[lossCard].count -= 1;
                             msg = `💀 惨遭反噬！进货失败，并随机丢失了一张【${lossCard}】！`;
                             resultText = `🔥 贪心被反噬！丢失了一张 ${lossCard}`;
-                            recordGachaResult(false); // 👈 第3处：记录输了
                         } else {
                             msg = "💀 进货失败！你已经穷得无券可扣了！";
                             resultText = `🔥 进货失败，穷得叮当响`;
-                            recordGachaResult(false); // 👈 第3处：记录输了
                         }
+                        innerGachaCalc(data, false);
                     }
                 }
 
