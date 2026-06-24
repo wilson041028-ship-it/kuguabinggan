@@ -293,6 +293,32 @@
             </div>
         </div>
 
+<div class="tab-section" id="tab-profile">
+            <div class="card">
+                <h3>👩 菱菱的面板</h3>
+                <p style="font-size: 14px; color: #666;">最后上线：<span id="lingling-last-online" style="color:#3498db; font-weight:bold;">未知</span></p>
+                <p style="font-size: 14px; color: #666;">当前称号：<span id="lingling-title" style="color: #e67e22; font-weight: bold;">平平无奇</span></p>
+                <p style="font-size: 14px; color: #666;">进货胜率：<span id="lingling-win-rate" style="font-weight:bold;">0%</span> (赢 <span id="lingling-wins">0</span> / 总 <span id="lingling-total">0</span>)</p>
+                <p style="font-size: 14px; color: #666;">被戳次数：<span id="lingling-pokes" style="color:#e74c3c; font-weight:bold;">0</span></p>
+                <button class="msg-btn" onclick="doPoke('lingling')">👉 戳一下菱菱</button>
+            </div>
+            <div class="card">
+                <h3>👦 小珂的面板</h3>
+                <p style="font-size: 14px; color: #666;">最后上线：<span id="xiaoke-last-online" style="color:#3498db; font-weight:bold;">未知</span></p>
+                <p style="font-size: 14px; color: #666;">当前称号：<span id="xiaoke-title" style="color: #e67e22; font-weight: bold;">平平无奇</span></p>
+                <p style="font-size: 14px; color: #666;">进货胜率：<span id="xiaoke-win-rate" style="font-weight:bold;">0%</span> (赢 <span id="xiaoke-wins">0</span> / 总 <span id="xiaoke-total">0</span>)</p>
+                <p style="font-size: 14px; color: #666;">被戳次数：<span id="xiaoke-pokes" style="color:#e74c3c; font-weight:bold;">0</span></p>
+                <button class="msg-btn" onclick="doPoke('xiaoke')">👉 戳一下小珂</button>
+            </div>
+            <div class="card">
+                <h3>🐾 隐藏成就陈列室</h3>
+                <ul style="list-style-type: none; padding-left: 0; font-size: 14px;">
+                    <li id="ach-tianxuan" style="color: #bdc3c7; margin-bottom: 10px;">??? - 在轮盘中连赢3次解锁</li>
+                    <li id="ach-yuanzhong" style="color: #bdc3c7;">??? - 在轮盘中连续失败3次解锁</li>
+                </ul>
+            </div>
+        </div>
+
         <div class="bottom-nav">
             <div class="nav-item active" onclick="switchTab('wheel', this)">
                 <span class="nav-icon">🎡</span>
@@ -305,6 +331,10 @@
             <div class="nav-item" onclick="switchTab('coupon', this)">
                 <span class="nav-icon">🎟️</span>
                 <span>兑换券</span>
+            </div>
+	<div class="nav-item" onclick="switchTab('profile', this)">
+                <span class="nav-icon">👑</span>
+                <span>主页</span>
             </div>
         </div>
     </div>
@@ -404,7 +434,11 @@
                 lingling: { food: 0, title: 0, mood: '开心 100% 💖', coupons: JSON.parse(JSON.stringify(defaultCoupons)), restockLimits: {} },
                 history: [],
                 messageBoard: { text: "欢迎来到我们的秘密基地！", updateBy: "系统", time: getTimeString() },
-                messageBoard2: { text: "这里也可以写贴贴话哦！", updateBy: "系统", time: getTimeString() }
+                messageBoard2: { text: "这里也可以写贴贴话哦！", updateBy: "系统", time: getTimeString() },
+                stats: {
+                    xiaoke: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0 },
+                    lingling: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0 }
+                }
             };
 
             try {
@@ -452,6 +486,7 @@
             }
 
             syncDataFromServer(false);
+            setTimeout(updateOnlineTime, 2000);
             initWheel('wheelFood', 'btnFood', 'resultFood', foods, '决定了！今天吃', 'food');
             initWheel('wheelTitle', 'btnTitle', 'resultTitle', titles, '决定了！今天称呼', 'title');
         }
@@ -520,6 +555,68 @@
             } catch (error) {
                 console.error('syncDataFromServer failed:', error);
                 if(!isSilent) statusDiv.innerText = `当前身份: ${currentUser==='lingling'?'👩 菱菱':'👦 小珂'} | ⚠️ ${error.message}`;
+            }
+        }
+
+function updateOnlineTime() {
+            fetchAndUpdate(function(data) {
+                if(!data.stats) return data; 
+                let now = new Date();
+                data.stats[currentUser].lastOnline = `${now.getMonth()+1}月${now.getDate()}日 ${getTimeString()}`;
+                return data;
+            });
+        }
+
+        function doPoke(targetUser) {
+            fetchAndUpdate(function(data) {
+                if(!data.stats) return data;
+                data.stats[targetUser].pokes += 1;
+                data.history.unshift({ user: currentUser, type: 'poke', result: `调皮地戳了戳 ${targetUser==='xiaoke'?'小珂':'菱菱'} 👉`, time: getTimeString() });
+                if (data.history.length > 30) data.history.pop();
+                return data;
+            }).then(() => alert("戳中啦！"));
+        }
+
+        function recordGachaResult(isWin) {
+            fetchAndUpdate(function(data) {
+                if(!data.stats) return data;
+                data.stats[currentUser].total += 1;
+                if (isWin) {
+                    data.stats[currentUser].wins += 1;
+                    data.stats[currentUser].streakWin += 1;
+                    data.stats[currentUser].streakLose = 0;
+                } else {
+                    data.stats[currentUser].streakLose += 1;
+                    data.stats[currentUser].streakWin = 0;
+                }
+                if (data.stats[currentUser].streakWin >= 3) data.stats[currentUser].title = "🎰 天选之子";
+                if (data.stats[currentUser].streakLose >= 3) data.stats[currentUser].title = "🧱 大冤种";
+                return data;
+            });
+        }
+
+        function updateProfileUI(data) {
+            if(!data.stats) return; 
+            document.getElementById('lingling-last-online').innerText = data.stats.lingling.lastOnline;
+            document.getElementById('xiaoke-last-online').innerText = data.stats.xiaoke.lastOnline;
+            document.getElementById('lingling-pokes').innerText = data.stats.lingling.pokes;
+            document.getElementById('xiaoke-pokes').innerText = data.stats.xiaoke.pokes;
+            document.getElementById('lingling-wins').innerText = data.stats.lingling.wins;
+            document.getElementById('lingling-total').innerText = data.stats.lingling.total;
+            document.getElementById('lingling-win-rate').innerText = data.stats.lingling.total > 0 ? Math.round((data.stats.lingling.wins / data.stats.lingling.total) * 100) + "%" : "0%";
+            document.getElementById('lingling-title').innerText = data.stats.lingling.title;
+            document.getElementById('xiaoke-wins').innerText = data.stats.xiaoke.wins;
+            document.getElementById('xiaoke-total').innerText = data.stats.xiaoke.total;
+            document.getElementById('xiaoke-win-rate').innerText = data.stats.xiaoke.total > 0 ? Math.round((data.stats.xiaoke.wins / data.stats.xiaoke.total) * 100) + "%" : "0%";
+            document.getElementById('xiaoke-title').innerText = data.stats.xiaoke.title;
+            
+            if (data.stats.xiaoke.title === "🎰 天选之子" || data.stats.lingling.title === "🎰 天选之子") {
+                document.getElementById('ach-tianxuan').innerText = "🏆 天选之子 - 已有欧皇解锁！";
+                document.getElementById('ach-tianxuan').style.color = "#f39c12"; document.getElementById('ach-tianxuan').style.fontWeight = "bold";
+            }
+            if (data.stats.xiaoke.title === "🧱 大冤种" || data.stats.lingling.title === "🧱 大冤种") {
+                document.getElementById('ach-yuanzhong').innerText = "🧱 大冤种 - 已有非酋解锁！";
+                document.getElementById('ach-yuanzhong').style.color = "#9b59b6"; document.getElementById('ach-yuanzhong').style.fontWeight = "bold";
             }
         }
 
@@ -606,6 +703,7 @@ document.getElementById('lingling-food-count').innerHTML = data.lingling.food + 
             if(prevSelectValue && restockSelectEl.querySelector(`option[value="${prevSelectValue}"]`)) {
                 restockSelectEl.value = prevSelectValue;
             }
+	updateProfileUI(data);
         }
 
         async function fetchAndUpdate(callback) {
@@ -721,10 +819,12 @@ document.getElementById('lingling-food-count').innerHTML = data.lingling.food + 
                         data[currentUser].coupons[cName].count += 1;
                         msg = "🎉 运气爆棚！成功进货1张！";
                         resultText = `🎰 轮盘赌赢了！获得了 ${cName}`;
+                        recordGachaResult(true);  // 👈 第2处：记录赢了
                     } else {
                         data[oppUser].coupons[cName].count += 1;
                         msg = "😭 赌博失败！券直接送给对方了！对方+1！";
                         resultText = `💥 轮盘赌输了！反送对方一张 ${cName}`;
+                        recordGachaResult(false); // 👈 第3处：记录输了
                     }
                 } 
                 else if(tier3.includes(cName)) {
@@ -732,6 +832,7 @@ document.getElementById('lingling-food-count').innerHTML = data.lingling.food + 
                         data[currentUser].coupons[cName].count += 1;
                         msg = "🌟 奇迹发生！成功获得稀有特权！";
                         resultText = `👑 绝地求生！成功获取 ${cName}`;
+                        recordGachaResult(true);  // 👈 第2处：记录赢了
                     } else {
                         let avail = Object.keys(data[currentUser].coupons).filter(k => data[currentUser].coupons[k].count > 0);
                         if(avail.length > 0) {
@@ -739,9 +840,11 @@ document.getElementById('lingling-food-count').innerHTML = data.lingling.food + 
                             data[currentUser].coupons[lossCard].count -= 1;
                             msg = `💀 惨遭反噬！进货失败，并随机丢失了一张【${lossCard}】！`;
                             resultText = `🔥 贪心被反噬！丢失了一张 ${lossCard}`;
+                            recordGachaResult(false); // 👈 第3处：记录输了
                         } else {
                             msg = "💀 进货失败！你已经穷得无券可扣了！";
                             resultText = `🔥 进货失败，穷得叮当响`;
+                            recordGachaResult(false); // 👈 第3处：记录输了
                         }
                     }
                 }
