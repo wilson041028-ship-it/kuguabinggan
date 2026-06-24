@@ -524,8 +524,15 @@
         }
 
         function updateUI(data) {
-            document.getElementById('xiaoke-food-count').innerText = `${data.xiaoke.food}次`;
-            document.getElementById('lingling-food-count').innerText = `${data.lingling.food}次`;
+            function getTitle(c) {
+    if(c >= 10) return " 👑[饭桶]";
+    if(c >= 5) return " 🎖️[干饭王]";
+    if(c >= 2) return " 🏅[小吃货]";
+    return "";
+}
+
+document.getElementById('xiaoke-food-count').innerHTML = data.xiaoke.food + "次<span style='font-size:12px;color:#f39c12'>" + getTitle(data.xiaoke.food) + "</span>";
+document.getElementById('lingling-food-count').innerHTML = data.lingling.food + "次<span style='font-size:12px;color:#f39c12'>" + 	getTitle(data.lingling.food) + "</span>";
             document.getElementById('xiaoke-title-count').innerText = `${data.xiaoke.title}次`;
             document.getElementById('lingling-title-count').innerText = `${data.lingling.title}次`;
 
