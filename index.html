@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#FFF0F5">
-    <title>菱菱和小珂的秘密基地</title>
+    <meta name="theme-color" content="#FFF0F5"> <title>菱菱和小珂的秘密基地</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #FFF0F5;
+            background-color: #FFF0F5; /* 修改了全局背景为浅粉色 */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -54,13 +53,13 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .card {
             background-color: white; border-radius: 25px; padding: 20px; margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(255,182,193,0.2);
+            box-shadow: 0 8px 20px rgba(255,182,193,0.2); /* 给卡片阴影加了一点点粉色呼吸感 */
             display: flex; flex-direction: column;
             align-items: center; width: 90%; max-width: 340px; box-sizing: border-box;
         }
         .card h2 { margin: 0 0 15px 0; color: #2c3e50; font-size: 20px; }
         .count-display {
-            display: flex; gap: 15px; background-color: #FFF9FA;
+            display: flex; gap: 15px; background-color: #FFF9FA; /* 修改为奶粉色 */
             padding: 8px 15px;
             border-radius: 15px; font-size: 13px; color: #576574; font-weight: bold;
             width: 100%; justify-content: center; box-sizing: border-box; margin-bottom: 15px;
@@ -110,7 +109,7 @@
         .msg-btn { width: 100%; background: #f39c12; color: white; border: none; padding: 10px; border-radius: 10px; font-weight: bold; margin-top: 10px; cursor: pointer; transition: 0.1s; }
         .msg-btn:active { transform: scale(0.95); }
         .coupon-list { width: 100%; display: flex; flex-direction: column; gap: 12px; }
-        .coupon-item { border-radius: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; color: white; }
+        .coupon-item { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); border-radius: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 10px rgba(253, 160, 133, 0.3); }
         .coupon-info { display: flex; flex-direction: column; flex: 1;}
         .coupon-name { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
         .coupon-desc { font-size: 12px; opacity: 0.9; line-height: 1.3;}
@@ -288,7 +287,7 @@
                     </div>
                     <div class="restock-rule">
                         🟢 抱抱/视线/故事：每日2次，冷却4小时<br>
-                        🟡 主调/愿望/大餐：50%失败倒贴一张绿/黄券<br>
+                        🟡 主调/愿望/大餐：50%失败则送给对方<br>
                         🔴 原谅/特权：30%成功，失败随机扣券
                     </div>
                 </div>
@@ -370,7 +369,6 @@
         let currentUser = ''; 
         let dbUrl = ''; 
         let masterKey = '';
-        let dataCache = null;
 
         const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
         function jbHeaders(extra) {
@@ -592,6 +590,7 @@
             }).then(() => alert("戳中啦！"));
         }
 
+        // 新增修改签名功能
         function editBio(user) {
             if (currentUser !== user) {
                 alert("只能修改自己的签名哦！");
@@ -625,9 +624,9 @@
         }
 
         function updateProfileUI(data) {
-            dataCache = data; 
             if(!data.stats) return; 
 
+            // 渲染签名
             document.getElementById('lingling-bio').innerText = data.stats.lingling.bio + (currentUser === 'lingling' ? " ✎" : "");
             document.getElementById('xiaoke-bio').innerText = data.stats.xiaoke.bio + (currentUser === 'xiaoke' ? " ✎" : "");
 
@@ -637,14 +636,11 @@
             document.getElementById('xiaoke-pokes').innerText = data.stats.xiaoke.pokes;
             document.getElementById('lingling-wins').innerText = data.stats.lingling.wins;
             document.getElementById('lingling-total').innerText = data.stats.lingling.total;
-            
-            let lRate = data.stats.lingling.total > 0 ? (data.stats.lingling.wins / data.stats.lingling.total) : 0;
-            document.getElementById('lingling-win-rate').innerText = Math.round(lRate * 100) + "%";
-            
-            let xRate = data.stats.xiaoke.total > 0 ? (data.stats.xiaoke.wins / data.stats.xiaoke.total) : 0;
-            document.getElementById('xiaoke-win-rate').innerText = Math.round(xRate * 100) + "%";
-
+            document.getElementById('lingling-win-rate').innerText = data.stats.lingling.total > 0 ? Math.round((data.stats.lingling.wins / data.stats.lingling.total) * 100) + "%" : "0%";
             document.getElementById('lingling-title').innerText = data.stats.lingling.title;
+            document.getElementById('xiaoke-wins').innerText = data.stats.xiaoke.wins;
+            document.getElementById('xiaoke-total').innerText = data.stats.xiaoke.total;
+            document.getElementById('xiaoke-win-rate').innerText = data.stats.xiaoke.total > 0 ? Math.round((data.stats.xiaoke.wins / data.stats.xiaoke.total) * 100) + "%" : "0%";
             document.getElementById('xiaoke-title').innerText = data.stats.xiaoke.title;
             
             if (data.stats.xiaoke.title === "🎰 天选之子" || data.stats.lingling.title === "🎰 天选之子") {
@@ -712,38 +708,14 @@
             const restockSelectEl = document.getElementById('restock-select');
             const prevSelectValue = restockSelectEl.value;
             restockSelectEl.innerHTML = '';
-
-            // 排序逻辑：按 绿 -> 黄 -> 红 排列
-            const sortedCouponNames = Object.keys(myCoupons).sort((a, b) => {
-                const getTierScore = (name) => {
-                    if (tier1.includes(name)) return 1;
-                    if (tier2.includes(name)) return 2;
-                    if (tier3.includes(name)) return 3;
-                    return 4;
-                };
-                return getTierScore(a) - getTierScore(b);
-            });
             
-            for (let cName of sortedCouponNames) {
+            for (let cName in myCoupons) {
                 let cData = myCoupons[cName];
                 let disabled = cData.count <= 0 ? 'disabled' : '';
                 let btnText = cData.count <= 0 ? '已用完' : `使用 (余${cData.count})`;
                 
                 const div = document.createElement('div');
                 div.className = 'coupon-item';
-
-                // 背景颜色分级逻辑
-                if (tier1.includes(cName)) {
-                    div.style.background = 'linear-gradient(135deg, #81FBB8 0%, #28C76F 100%)';
-                    div.style.boxShadow = '0 4px 10px rgba(40, 199, 111, 0.3)';
-                } else if (tier3.includes(cName)) {
-                    div.style.background = 'linear-gradient(135deg, #FF758C 0%, #FF7EB3 100%)';
-                    div.style.boxShadow = '0 4px 10px rgba(255, 117, 140, 0.3)';
-                } else {
-                    div.style.background = 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)';
-                    div.style.boxShadow = '0 4px 10px rgba(253, 160, 133, 0.3)';
-                }
-
                 div.innerHTML = `
                     <div class="coupon-info">
                         <div class="coupon-name">${cName}</div>
@@ -882,19 +854,9 @@
                         resultText = `🎰 轮盘赌赢了！获得了 ${cName}`;
                         innerGachaCalc(data, true);
                     } else {
-                        let avail = Object.keys(data[currentUser].coupons).filter(k => 
-                            (tier1.includes(k) || tier2.includes(k)) && data[currentUser].coupons[k].count > 0
-                        );
-                        if(avail.length > 0) {
-                            let lossCard = avail[Math.floor(Math.random() * avail.length)];
-                            data[currentUser].coupons[lossCard].count -= 1;
-                            data[oppUser].coupons[lossCard].count += 1;
-                            msg = `😭 赌博失败！随机扣除了你的一张【${lossCard}】送给了对方！`;
-                            resultText = `💥 轮盘赌输了！倒贴对方一张 ${lossCard}`;
-                        } else {
-                            msg = "😭 赌博失败！原本要扣一张绿/黄券送对方，但你已经穷得没券可扣了！";
-                            resultText = `💥 进货失败，穷得连倒贴的券都没了`;
-                        }
+                        data[oppUser].coupons[cName].count += 1;
+                        msg = "😭 赌博失败！券直接送给对方了！对方+1！";
+                        resultText = `💥 轮盘赌输了！反送对方一张 ${cName}`;
                         innerGachaCalc(data, false);
                     }
                 } 
