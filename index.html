@@ -21,6 +21,7 @@
             user-select: none; 
             -webkit-user-select: none;
             min-height: 100vh;
+            min-height: 100dvh; /* 新增：完美适配手机浏览器的动态高度，防止底栏跳动 */
             box-sizing: border-box;
         }
         input, textarea, select, option {
@@ -127,11 +128,18 @@
         .restock-btn { background: #2ecc71; color: white; border: none; padding: 8px 15px; border-radius: 10px; font-weight: bold; cursor: pointer; white-space: nowrap; transition: 0.1s;}
         .restock-btn:active { transform: scale(0.95); }
         .restock-rule { font-size: 11px; color: #7f8c8d; line-height: 1.4; }
+        
+        /* 修改：强制底栏沉底防抖 */
         .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; background: white;
+            position: fixed !important; 
+            bottom: 0 !important; 
+            left: 0; width: 100%; background: white;
             display: flex; justify-content: space-around; padding: 12px 0;
             padding-bottom: calc(12px + env(safe-area-inset-bottom));
-            box-shadow: 0 -2px 15px rgba(0,0,0,0.05); z-index: 100;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.05); 
+            z-index: 9999;
+            transform: translateZ(0); 
+            -webkit-transform: translateZ(0);
         }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #95a5a6; font-size: 12px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
         .nav-item.active { color: #e74c3c; transform: translateY(-3px); }
@@ -278,12 +286,16 @@
                     <h3 style="margin-top: 0; margin-bottom: 15px; color: #e84393; text-align: center;">🗓️ 菱菱和小珂的纪念日</h3>
                     
                     <div id="anniversary-list" style="width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
-                        </div>
+                    </div>
                     
                     <div style="width: 100%; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #FFE4E1; padding-top: 15px;">
+                        <select id="anni-type" style="padding: 10px; border-radius: 10px; border: 1px solid #FFB6C1; outline: none; font-size: 14px; color: #555;">
+                            <option value="other">🌟 普通纪念日 (算累计天数)</option>
+                            <option value="birthday">🎂 每年生日 (算离下次还有几天)</option>
+                        </select>
                         <input type="text" id="anni-name" placeholder="输入名称 (如：第一次见面)" style="padding: 10px; border-radius: 10px; border: 1px solid #FFB6C1; outline: none; font-size: 14px;">
                         <input type="date" id="anni-date" style="padding: 10px; border-radius: 10px; border: 1px solid #FFB6C1; outline: none; font-size: 14px; color: #555;">
-                        <button class="msg-btn" style="background: #e84393; margin-top: 5px;" onclick="saveAnniversary()">添加纪念日</button>
+                        <button class="msg-btn" style="background: #e84393; margin-top: 5px;" onclick="saveAnniversary()">添加</button>
                     </div>
                 </div>
             </div>
@@ -643,8 +655,10 @@
         }
 
         function saveAnniversary() {
+            const typeEl = document.getElementById('anni-type');
             const nameEl = document.getElementById('anni-name');
             const dateEl = document.getElementById('anni-date');
+            const type = typeEl ? typeEl.value : 'other';
             const name = nameEl.value.trim();
             const dateStr = dateEl.value;
             
@@ -655,7 +669,7 @@
             
             fetchAndUpdate(data => {
                 if(!data.anniversaries) data.anniversaries = [];
-                data.anniversaries.push({ name: name, date: dateStr });
+                data.anniversaries.push({ name: name, date: dateStr, type: type });
                 data.anniversaries.sort((a, b) => new Date(a.date) - new Date(b.date));
                 return data;
             }).then(() => {
@@ -781,10 +795,21 @@
                         today.setHours(0,0,0,0);
                         const targetDate = new Date(anni.date);
                         targetDate.setHours(0,0,0,0);
-                        const diffTime = today.getTime() - targetDate.getTime();
-                        const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
                         
-                        let daysText = diffDays >= 0 ? `已过 <b style="font-size:18px;">${diffDays}</b> 天` : `还有 <b style="font-size:18px;">${Math.abs(diffDays)}</b> 天`;
+                        let daysText = "";
+                        if (anni.type === 'birthday') {
+                            let nextBday = new Date(today.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+                            if (today.getTime() > nextBday.getTime()) {
+                                nextBday.setFullYear(today.getFullYear() + 1);
+                            }
+                            const diffTime = nextBday.getTime() - today.getTime();
+                            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+                            daysText = diffDays === 0 ? `<b style="font-size:18px;">今天生日!</b> 🎂` : `还有 <b style="font-size:18px;">${diffDays}</b> 天`;
+                        } else {
+                            const diffTime = today.getTime() - targetDate.getTime();
+                            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+                            daysText = diffDays >= 0 ? `已过 <b style="font-size:18px;">${diffDays}</b> 天` : `还有 <b style="font-size:18px;">${Math.abs(diffDays)}</b> 天`;
+                        }
                         
                         const div = document.createElement('div');
                         div.style.cssText = "background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%); color: white; padding: 12px 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(255, 154, 158, 0.3);";
@@ -813,7 +838,7 @@
             const prevSelectValue = restockSelectEl.value;
             restockSelectEl.innerHTML = '';
 
-            // 按 等级(1=绿, 2=黄, 3=红) 进行排序
+            // 排序逻辑：按 绿 -> 黄 -> 红 排列
             const sortedCouponNames = Object.keys(myCoupons).sort((a, b) => {
                 const getTierScore = (name) => {
                     if (tier1.includes(name)) return 1;
