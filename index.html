@@ -255,6 +255,14 @@
                     <div style="font-size: 12px; color: #999; margin-top: 10px; text-align: right;" id="msg-info"></div>
                 </div>
             </div>
+
+            <div class="card" style="background: transparent; box-shadow: none;">
+                <div class="msg-board">
+                    <textarea class="msg-textarea" id="board-text-2" placeholder="再写一张冰箱贴吧..."></textarea>
+                    <button class="msg-btn" id="btnSaveMsg2" onclick="saveMessage2()">贴在冰箱上</button>
+                    <div style="font-size: 12px; color: #999; margin-top: 10px; text-align: right;" id="msg-info-2"></div>
+                </div>
+            </div>
         </div>
 
         <div class="tab-section" id="tab-coupon">
@@ -388,7 +396,8 @@
                 xiaoke: { food: 0, title: 0, mood: '开心 100% 💖', coupons: JSON.parse(JSON.stringify(defaultCoupons)), restockLimits: {} },
                 lingling: { food: 0, title: 0, mood: '开心 100% 💖', coupons: JSON.parse(JSON.stringify(defaultCoupons)), restockLimits: {} },
                 history: [],
-                messageBoard: { text: "欢迎来到我们的秘密基地！", updateBy: "系统", time: getTimeString() }
+                messageBoard: { text: "欢迎来到我们的秘密基地！", updateBy: "系统", time: getTimeString() },
+                messageBoard2: { text: "这里也可以写贴贴话哦！", updateBy: "系统", time: getTimeString() }
             };
 
             try {
@@ -441,6 +450,9 @@
         }
 
         function mergeCoupons(data) {
+            if (!data.messageBoard2) {
+                data.messageBoard2 = { text: "这里也可以写贴贴话哦！", updateBy: "系统", time: getTimeString() };
+            }
             ['xiaoke', 'lingling'].forEach(user => {
                 if(!data[user].coupons) data[user].coupons = {};
                 if(!data[user].restockLimits) data[user].restockLimits = {};
@@ -539,6 +551,12 @@
             }
             document.getElementById('msg-info').innerText = `最后由 ${data.messageBoard.updateBy} 更新于 ${data.messageBoard.time}`;
 
+            const boardEl2 = document.getElementById('board-text-2');
+            if (document.activeElement !== boardEl2) {
+                boardEl2.value = data.messageBoard2.text;
+            }
+            document.getElementById('msg-info-2').innerText = `最后由 ${data.messageBoard2.updateBy} 更新于 ${data.messageBoard2.time}`;
+
             const couponListEl = document.getElementById('coupon-list');
             couponListEl.innerHTML = '';
             const myCoupons = data[currentUser].coupons;
@@ -617,6 +635,18 @@
             btn.innerText = "粘贴中...";
             fetchAndUpdate(data => {
                 data.messageBoard = { text: text, updateBy: currentUser === 'xiaoke'?'小珂':'菱菱', time: getTimeString() };
+                return data;
+            }).then(() => {
+                btn.innerText = "✅ 贴好啦！"; setTimeout(() => btn.innerText = "贴在冰箱上", 2000);
+            });
+        }
+
+        function saveMessage2() {
+            const btn = document.getElementById('btnSaveMsg2');
+            const text = document.getElementById('board-text-2').value;
+            btn.innerText = "粘贴中...";
+            fetchAndUpdate(data => {
+                data.messageBoard2 = { text: text, updateBy: currentUser === 'xiaoke'?'小珂':'菱菱', time: getTimeString() };
                 return data;
             }).then(() => {
                 btn.innerText = "✅ 贴好啦！"; setTimeout(() => btn.innerText = "贴在冰箱上", 2000);
