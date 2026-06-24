@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#FFF0F5"> <title>菱菱和小珂的秘密基地</title>
+    <meta name="theme-color" content="#FFF0F5">
+    <title>菱菱和小珂的秘密基地</title>
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="apple-touch-icon" href="icon.png">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #FFF0F5; /* 修改了全局背景为浅粉色 */
+            background-color: #FFF0F5;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -53,13 +54,13 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .card {
             background-color: white; border-radius: 25px; padding: 20px; margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(255,182,193,0.2); /* 给卡片阴影加了一点点粉色呼吸感 */
+            box-shadow: 0 8px 20px rgba(255,182,193,0.2);
             display: flex; flex-direction: column;
             align-items: center; width: 90%; max-width: 340px; box-sizing: border-box;
         }
         .card h2 { margin: 0 0 15px 0; color: #2c3e50; font-size: 20px; }
         .count-display {
-            display: flex; gap: 15px; background-color: #FFF9FA; /* 修改为奶粉色 */
+            display: flex; gap: 15px; background-color: #FFF9FA;
             padding: 8px 15px;
             border-radius: 15px; font-size: 13px; color: #576574; font-weight: bold;
             width: 100%; justify-content: center; box-sizing: border-box; margin-bottom: 15px;
@@ -109,7 +110,7 @@
         .msg-btn { width: 100%; background: #f39c12; color: white; border: none; padding: 10px; border-radius: 10px; font-weight: bold; margin-top: 10px; cursor: pointer; transition: 0.1s; }
         .msg-btn:active { transform: scale(0.95); }
         .coupon-list { width: 100%; display: flex; flex-direction: column; gap: 12px; }
-        .coupon-item { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); border-radius: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 10px rgba(253, 160, 133, 0.3); }
+        .coupon-item { border-radius: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; color: white; }
         .coupon-info { display: flex; flex-direction: column; flex: 1;}
         .coupon-name { font-size: 16px; font-weight: bold; margin-bottom: 5px; }
         .coupon-desc { font-size: 12px; opacity: 0.9; line-height: 1.3;}
@@ -271,6 +272,21 @@
                     <div style="font-size: 12px; color: #999; margin-top: 10px; text-align: right;" id="msg-info-2"></div>
                 </div>
             </div>
+
+            <div class="card" style="background: transparent; box-shadow: none;">
+                <div style="width: 100%; background: #FFF9FA; border-radius: 15px; padding: 15px; box-sizing: border-box; box-shadow: 0 4px 15px rgba(255,182,193,0.3); border: 1px dashed #FFB6C1;">
+                    <h3 style="margin-top: 0; margin-bottom: 15px; color: #e84393; text-align: center;">🗓️ 菱菱和小珂的纪念日</h3>
+                    
+                    <div id="anniversary-list" style="width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px;">
+                        </div>
+                    
+                    <div style="width: 100%; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #FFE4E1; padding-top: 15px;">
+                        <input type="text" id="anni-name" placeholder="输入名称 (如：第一次见面)" style="padding: 10px; border-radius: 10px; border: 1px solid #FFB6C1; outline: none; font-size: 14px;">
+                        <input type="date" id="anni-date" style="padding: 10px; border-radius: 10px; border: 1px solid #FFB6C1; outline: none; font-size: 14px; color: #555;">
+                        <button class="msg-btn" style="background: #e84393; margin-top: 5px;" onclick="saveAnniversary()">添加纪念日</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="tab-section" id="tab-coupon">
@@ -287,7 +303,7 @@
                     </div>
                     <div class="restock-rule">
                         🟢 抱抱/视线/故事：每日2次，冷却4小时<br>
-                        🟡 主调/愿望/大餐：50%失败则送给对方<br>
+                        🟡 主调/愿望/大餐/听话：50%失败倒贴一张绿/黄券<br>
                         🔴 原谅/特权：30%成功，失败随机扣券
                     </div>
                 </div>
@@ -304,7 +320,7 @@
                 <p style="font-size: 14px; color: #666;">当前称号：<span id="lingling-title" style="color: #e67e22; font-weight: bold;">平平无奇</span></p>
                 <p style="font-size: 14px; color: #666;">进货胜率：<span id="lingling-win-rate" style="font-weight:bold;">0%</span> (赢 <span id="lingling-wins">0</span> / 总 <span id="lingling-total">0</span>)</p>
                 <p style="font-size: 14px; color: #666;">被戳次数：<span id="lingling-pokes" style="color:#e74c3c; font-weight:bold;">0</span></p>
-                <button class="msg-btn" onclick="doPoke('lingling')">👉 戳一下菱菱</button>
+                <button class="msg-btn" onclick="doPoke('lingling', this)">👉 戳一下菱菱</button>
             </div>
             <div class="card">
                 <h3>👦 小珂的面板</h3>
@@ -315,7 +331,7 @@
                 <p style="font-size: 14px; color: #666;">当前称号：<span id="xiaoke-title" style="color: #e67e22; font-weight: bold;">平平无奇</span></p>
                 <p style="font-size: 14px; color: #666;">进货胜率：<span id="xiaoke-win-rate" style="font-weight:bold;">0%</span> (赢 <span id="xiaoke-wins">0</span> / 总 <span id="xiaoke-total">0</span>)</p>
                 <p style="font-size: 14px; color: #666;">被戳次数：<span id="xiaoke-pokes" style="color:#e74c3c; font-weight:bold;">0</span></p>
-                <button class="msg-btn" onclick="doPoke('xiaoke')">👉 戳一下小珂</button>
+                <button class="msg-btn" onclick="doPoke('xiaoke', this)">👉 戳一下小珂</button>
             </div>
             <div class="card">
                 <h3>🐾 隐藏成就陈列室</h3>
@@ -354,6 +370,7 @@
         const defaultCoupons = {
             '睡前故事券': { desc: '给我讲个睡前小故事', count: 3 },
             '满足愿望券': { desc: '满足一个小愿望', count: 2 },
+            '无条件听话券': { desc: '接下来的三小时内对方需要无条件听从你的', count: 2 },
             '原谅一次券': { desc: '做错小事免除一次生气TvT', count: 4 },
             '视线共享券': { desc: '拍一张你眼前的画面发给我', count: 5 },
             '见面特权券': { desc: '留到下次见面时使用！无条件陪我做一件我想做的事', count: 3 },
@@ -363,12 +380,13 @@
         };
 
         const tier1 = ['贴贴抱抱券', '视线共享券', '睡前故事券'];
-        const tier2 = ['叫主人券', '满足愿望券', '豪华大餐券'];
+        const tier2 = ['叫主人券', '满足愿望券', '豪华大餐券', '无条件听话券'];
         const tier3 = ['原谅一次券', '见面特权券'];
 
         let currentUser = ''; 
         let dbUrl = ''; 
         let masterKey = '';
+        let dataCache = null;
 
         const JSONBIN_BASE = 'https://api.jsonbin.io/v3/b';
         function jbHeaders(extra) {
@@ -438,6 +456,7 @@
                 history: [],
                 messageBoard: { text: "欢迎来到我们的秘密基地！", updateBy: "系统", time: getTimeString() },
                 messageBoard2: { text: "这里也可以写贴贴话哦！", updateBy: "系统", time: getTimeString() },
+                anniversaries: [],
                 stats: {
                     xiaoke: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0, bio: "这家伙很懒，还没写签名~" },
                     lingling: { wins: 0, total: 0, pokes: 0, lastOnline: "未知", title: "平平无奇", streakWin: 0, streakLose: 0, bio: "这家伙很懒，还没写签名~" }
@@ -496,6 +515,9 @@
         function mergeCoupons(data) {
             if (!data.messageBoard2) {
                 data.messageBoard2 = { text: "这里也可以写贴贴话哦！", updateBy: "系统", time: getTimeString() };
+            }
+            if (!data.anniversaries) {
+                data.anniversaries = [];
             }
             if (!data.stats) {
                 data.stats = {
@@ -580,17 +602,29 @@
             });
         }
 
-        function doPoke(targetUser) {
+        function doPoke(targetUser, btnElement) {
+            const originalText = btnElement.innerText;
+            const originalBg = btnElement.style.backgroundColor;
+            
+            btnElement.innerText = "✨ 戳中啦！";
+            btnElement.style.backgroundColor = "#2ecc71";
+            btnElement.disabled = true;
+
             fetchAndUpdate(function(data) {
                 if(!data.stats) return data;
                 data.stats[targetUser].pokes += 1;
                 data.history.unshift({ user: currentUser, type: 'poke', result: `调皮地戳了戳 ${targetUser==='xiaoke'?'小珂':'菱菱'} 👉`, time: getTimeString() });
                 if (data.history.length > 30) data.history.pop();
                 return data;
-            }).then(() => alert("戳中啦！"));
+            }).then(() => {
+                setTimeout(() => {
+                    btnElement.innerText = originalText;
+                    btnElement.style.backgroundColor = originalBg || "";
+                    btnElement.disabled = false;
+                }, 1500);
+            });
         }
 
-        // 新增修改签名功能
         function editBio(user) {
             if (currentUser !== user) {
                 alert("只能修改自己的签名哦！");
@@ -603,6 +637,39 @@
                 let finalBio = newBio.trim() === "" ? "这家伙很懒，还没写签名~" : newBio.trim();
                 fetchAndUpdate(data => {
                     data.stats[user].bio = finalBio;
+                    return data;
+                });
+            }
+        }
+
+        function saveAnniversary() {
+            const nameEl = document.getElementById('anni-name');
+            const dateEl = document.getElementById('anni-date');
+            const name = nameEl.value.trim();
+            const dateStr = dateEl.value;
+            
+            if (!name || !dateStr) {
+                alert("名称和日期都不能为空哦！");
+                return;
+            }
+            
+            fetchAndUpdate(data => {
+                if(!data.anniversaries) data.anniversaries = [];
+                data.anniversaries.push({ name: name, date: dateStr });
+                data.anniversaries.sort((a, b) => new Date(a.date) - new Date(b.date));
+                return data;
+            }).then(() => {
+                nameEl.value = '';
+                dateEl.value = '';
+            });
+        }
+
+        function deleteAnniversary(index) {
+            if(confirm("确定要删除这个纪念日吗？")) {
+                fetchAndUpdate(data => {
+                    if(data.anniversaries) {
+                        data.anniversaries.splice(index, 1);
+                    }
                     return data;
                 });
             }
@@ -624,9 +691,9 @@
         }
 
         function updateProfileUI(data) {
+            dataCache = data; 
             if(!data.stats) return; 
 
-            // 渲染签名
             document.getElementById('lingling-bio').innerText = data.stats.lingling.bio + (currentUser === 'lingling' ? " ✎" : "");
             document.getElementById('xiaoke-bio').innerText = data.stats.xiaoke.bio + (currentUser === 'xiaoke' ? " ✎" : "");
 
@@ -636,11 +703,14 @@
             document.getElementById('xiaoke-pokes').innerText = data.stats.xiaoke.pokes;
             document.getElementById('lingling-wins').innerText = data.stats.lingling.wins;
             document.getElementById('lingling-total').innerText = data.stats.lingling.total;
-            document.getElementById('lingling-win-rate').innerText = data.stats.lingling.total > 0 ? Math.round((data.stats.lingling.wins / data.stats.lingling.total) * 100) + "%" : "0%";
+            
+            let lRate = data.stats.lingling.total > 0 ? (data.stats.lingling.wins / data.stats.lingling.total) : 0;
+            document.getElementById('lingling-win-rate').innerText = Math.round(lRate * 100) + "%";
+            
+            let xRate = data.stats.xiaoke.total > 0 ? (data.stats.xiaoke.wins / data.stats.xiaoke.total) : 0;
+            document.getElementById('xiaoke-win-rate').innerText = Math.round(xRate * 100) + "%";
+
             document.getElementById('lingling-title').innerText = data.stats.lingling.title;
-            document.getElementById('xiaoke-wins').innerText = data.stats.xiaoke.wins;
-            document.getElementById('xiaoke-total').innerText = data.stats.xiaoke.total;
-            document.getElementById('xiaoke-win-rate').innerText = data.stats.xiaoke.total > 0 ? Math.round((data.stats.xiaoke.wins / data.stats.xiaoke.total) * 100) + "%" : "0%";
             document.getElementById('xiaoke-title').innerText = data.stats.xiaoke.title;
             
             if (data.stats.xiaoke.title === "🎰 天选之子" || data.stats.lingling.title === "🎰 天选之子") {
@@ -701,6 +771,40 @@
             }
             document.getElementById('msg-info-2').innerText = `最后由 ${data.messageBoard2.updateBy} 更新于 ${data.messageBoard2.time}`;
 
+            // 渲染纪念日列表
+            const anniListEl = document.getElementById('anniversary-list');
+            if (anniListEl) {
+                anniListEl.innerHTML = '';
+                if (data.anniversaries && data.anniversaries.length > 0) {
+                    data.anniversaries.forEach((anni, index) => {
+                        const today = new Date();
+                        today.setHours(0,0,0,0);
+                        const targetDate = new Date(anni.date);
+                        targetDate.setHours(0,0,0,0);
+                        const diffTime = today.getTime() - targetDate.getTime();
+                        const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+                        
+                        let daysText = diffDays >= 0 ? `已过 <b style="font-size:18px;">${diffDays}</b> 天` : `还有 <b style="font-size:18px;">${Math.abs(diffDays)}</b> 天`;
+                        
+                        const div = document.createElement('div');
+                        div.style.cssText = "background: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%); color: white; padding: 12px 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(255, 154, 158, 0.3);";
+                        div.innerHTML = `
+                            <div style="display: flex; flex-direction: column;">
+                                <span style="font-size: 16px; font-weight: bold; margin-bottom: 3px;">${anni.name}</span>
+                                <span style="font-size: 12px; opacity: 0.9;">${anni.date}</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span style="font-size: 13px;">${daysText}</span>
+                                <span style="cursor: pointer; font-size: 12px; background: rgba(255,255,255,0.2); padding: 4px 6px; border-radius: 6px;" onclick="deleteAnniversary(${index})">❌</span>
+                            </div>
+                        `;
+                        anniListEl.appendChild(div);
+                    });
+                } else {
+                    anniListEl.innerHTML = '<div style="text-align: center; color: #999; font-size: 13px;">还没有添加纪念日哦~</div>';
+                }
+            }
+
             const couponListEl = document.getElementById('coupon-list');
             couponListEl.innerHTML = '';
             const myCoupons = data[currentUser].coupons;
@@ -708,14 +812,38 @@
             const restockSelectEl = document.getElementById('restock-select');
             const prevSelectValue = restockSelectEl.value;
             restockSelectEl.innerHTML = '';
+
+            // 按 等级(1=绿, 2=黄, 3=红) 进行排序
+            const sortedCouponNames = Object.keys(myCoupons).sort((a, b) => {
+                const getTierScore = (name) => {
+                    if (tier1.includes(name)) return 1;
+                    if (tier2.includes(name)) return 2;
+                    if (tier3.includes(name)) return 3;
+                    return 4;
+                };
+                return getTierScore(a) - getTierScore(b);
+            });
             
-            for (let cName in myCoupons) {
+            for (let cName of sortedCouponNames) {
                 let cData = myCoupons[cName];
                 let disabled = cData.count <= 0 ? 'disabled' : '';
                 let btnText = cData.count <= 0 ? '已用完' : `使用 (余${cData.count})`;
                 
                 const div = document.createElement('div');
                 div.className = 'coupon-item';
+
+                // 背景颜色分级逻辑
+                if (tier1.includes(cName)) {
+                    div.style.background = 'linear-gradient(135deg, #81FBB8 0%, #28C76F 100%)';
+                    div.style.boxShadow = '0 4px 10px rgba(40, 199, 111, 0.3)';
+                } else if (tier3.includes(cName)) {
+                    div.style.background = 'linear-gradient(135deg, #FF758C 0%, #FF7EB3 100%)';
+                    div.style.boxShadow = '0 4px 10px rgba(255, 117, 140, 0.3)';
+                } else {
+                    div.style.background = 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)';
+                    div.style.boxShadow = '0 4px 10px rgba(253, 160, 133, 0.3)';
+                }
+
                 div.innerHTML = `
                     <div class="coupon-info">
                         <div class="coupon-name">${cName}</div>
@@ -854,9 +982,19 @@
                         resultText = `🎰 轮盘赌赢了！获得了 ${cName}`;
                         innerGachaCalc(data, true);
                     } else {
-                        data[oppUser].coupons[cName].count += 1;
-                        msg = "😭 赌博失败！券直接送给对方了！对方+1！";
-                        resultText = `💥 轮盘赌输了！反送对方一张 ${cName}`;
+                        let avail = Object.keys(data[currentUser].coupons).filter(k => 
+                            (tier1.includes(k) || tier2.includes(k)) && data[currentUser].coupons[k].count > 0
+                        );
+                        if(avail.length > 0) {
+                            let lossCard = avail[Math.floor(Math.random() * avail.length)];
+                            data[currentUser].coupons[lossCard].count -= 1;
+                            data[oppUser].coupons[lossCard].count += 1;
+                            msg = `😭 赌博失败！随机扣除了你的一张【${lossCard}】送给了对方！`;
+                            resultText = `💥 轮盘赌输了！倒贴对方一张 ${lossCard}`;
+                        } else {
+                            msg = "😭 赌博失败！原本要扣一张绿/黄券送对方，但你已经穷得没券可扣了！";
+                            resultText = `💥 进货失败，穷得连倒贴的券都没了`;
+                        }
                         innerGachaCalc(data, false);
                     }
                 } 
